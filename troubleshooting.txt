@@ -1,0 +1,4 @@
+1.
+error:undeclared function "__disable_irq"和__asm报错：
+使用了AC6编译器，与cubemx freertos的固件库不兼容，
+解决办法为将cubemx的库文件路径Repository文件夹中的RVDS下的port.c等文件用GCC下的同名文件替换
