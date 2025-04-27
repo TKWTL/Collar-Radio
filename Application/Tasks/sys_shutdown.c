@@ -5,6 +5,7 @@
 
 void SysShutdown_Task(void *argument){
     for(;;){
-        osDelay(1);
+        SystemSleep();
+        osDelay(pdMS_TO_TICKS(10));
     }
 }

@@ -35,7 +35,7 @@ extern "C" {
 #include "ui_conf.h"
 
 void AddItem(const char *name, UI_ITEM_TYPE type, const uint8_t *image, ui_item_t *item, ui_page_t *localPage, ui_page_t *nextPage, ui_item_function function);
-void AddPage(const char *name, ui_page_t *page, UI_PAGE_TYPE type);
+void AddPage(const char *name, ui_page_t *page, UI_PAGE_TYPE type, ui_page_t *parent);
 float UI_Animation(float targrt, float now, ui_animation_param_t *obj);
 float easeInOutCirc(float t, float b, float c, float d);
 uint8_t Dialog_Show(ui_t *ui, int16_t x,int16_t y,int16_t targrtW,int16_t targrtH);

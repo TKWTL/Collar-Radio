@@ -43,25 +43,34 @@ void Text_Widget(ui_t *ui)
     // 设置字体
     Disp_SetFont(font);
 
-    // 计算字符总数
+    //计算字符总数
     int char_cnt = strlen(text_ptr);
 
-    // 计算每行的最大字符数
+    //计算每行的最大字符数
     int lineMaxCnt = UI_HOR_RES / fontWidth - 1;
+    
+    //每行已显示过的字符数
+    int printed_char = 0;
 
-    // 初始化行号和X坐标
+    //初始化行号和X坐标
     int line = 0;
     int x = ui->nowItem->element->text->fontWidth - 2;
 
-    // 检查对话框是否显示成功
-    if (Dialog_Show(ui, 0, 0, UI_HOR_RES - 2, UI_VER_RES - 2)) {
+    //等待直到对话框完全显示
+    if (Dialog_Show(ui, 1, 1, UI_HOR_RES - 2, UI_VER_RES - 2)) {
         for (int i = 0; i < char_cnt; i++) {
             char c = text_ptr[i];
-            Disp_DrawStr(x, fontHight + line * fontHight, &c);
+            Disp_Putchar(x, fontHight + line * fontHight, c);
             x += fontWidth;
-            if ((i + 1) % lineMaxCnt == 0) {
+            printed_char++;
+            if (c == '\t') {
+                x += fontWidth* 3;
+                printed_char += 3;
+            }
+            if (printed_char >= lineMaxCnt || c == '\n') {
                 line++;
                 x = ui->nowItem->element->text->fontWidth - 2;
+                printed_char = 0;
             }
             // 检查是否超出屏幕高度
             if (line * fontHight >= UI_VER_RES - 2) {

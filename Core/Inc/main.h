@@ -31,6 +31,16 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "stm32g0xx_hal.h"
 
+#include "stm32g0xx_ll_rcc.h"
+#include "stm32g0xx_ll_bus.h"
+#include "stm32g0xx_ll_system.h"
+#include "stm32g0xx_ll_exti.h"
+#include "stm32g0xx_ll_cortex.h"
+#include "stm32g0xx_ll_utils.h"
+#include "stm32g0xx_ll_pwr.h"
+#include "stm32g0xx_ll_dma.h"
+#include "stm32g0xx_ll_gpio.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 //片上外设次级驱动库
@@ -64,49 +74,49 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define VBAT_Pin GPIO_PIN_2
+#define VBAT_Pin LL_GPIO_PIN_2
 #define VBAT_GPIO_Port GPIOA
-#define F_Pin GPIO_PIN_7
+#define F_Pin LL_GPIO_PIN_7
 #define F_GPIO_Port GPIOA
 #define F_EXTI_IRQn EXTI4_15_IRQn
-#define B_Pin GPIO_PIN_0
+#define B_Pin LL_GPIO_PIN_0
 #define B_GPIO_Port GPIOB
 #define B_EXTI_IRQn EXTI0_1_IRQn
-#define E_Pin GPIO_PIN_1
+#define E_Pin LL_GPIO_PIN_1
 #define E_GPIO_Port GPIOB
 #define E_EXTI_IRQn EXTI0_1_IRQn
-#define ICHG_Pin GPIO_PIN_2
+#define ICHG_Pin LL_GPIO_PIN_2
 #define ICHG_GPIO_Port GPIOB
-#define CHRG_Pin GPIO_PIN_9
+#define CHRG_Pin LL_GPIO_PIN_9
 #define CHRG_GPIO_Port GPIOA
 #define CHRG_EXTI_IRQn EXTI4_15_IRQn
-#define STDBY_Pin GPIO_PIN_6
+#define STDBY_Pin LL_GPIO_PIN_6
 #define STDBY_GPIO_Port GPIOC
 #define STDBY_EXTI_IRQn EXTI4_15_IRQn
-#define INT_Pin GPIO_PIN_10
+#define INT_Pin LL_GPIO_PIN_10
 #define INT_GPIO_Port GPIOA
 #define INT_EXTI_IRQn EXTI4_15_IRQn
-#define SCL_Pin GPIO_PIN_11
+#define SCL_Pin LL_GPIO_PIN_11
 #define SCL_GPIO_Port GPIOA
-#define SDA_Pin GPIO_PIN_12
+#define SDA_Pin LL_GPIO_PIN_12
 #define SDA_GPIO_Port GPIOA
-#define D_Pin GPIO_PIN_15
+#define D_Pin LL_GPIO_PIN_15
 #define D_GPIO_Port GPIOA
 #define D_EXTI_IRQn EXTI4_15_IRQn
-#define C_Pin GPIO_PIN_3
+#define C_Pin LL_GPIO_PIN_3
 #define C_GPIO_Port GPIOB
 #define C_EXTI_IRQn EXTI2_3_IRQn
-#define A_Pin GPIO_PIN_4
+#define A_Pin LL_GPIO_PIN_4
 #define A_GPIO_Port GPIOB
 #define A_EXTI_IRQn EXTI4_15_IRQn
-#define INDET_Pin GPIO_PIN_5
+#define INDET_Pin LL_GPIO_PIN_5
 #define INDET_GPIO_Port GPIOB
 #define INDET_EXTI_IRQn EXTI4_15_IRQn
-#define TX_Pin GPIO_PIN_6
+#define TX_Pin LL_GPIO_PIN_6
 #define TX_GPIO_Port GPIOB
-#define RX_Pin GPIO_PIN_7
+#define RX_Pin LL_GPIO_PIN_7
 #define RX_GPIO_Port GPIOB
-#define CPEN_Pin GPIO_PIN_8
+#define CPEN_Pin LL_GPIO_PIN_8
 #define CPEN_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */

@@ -9,22 +9,22 @@
 /****************************用户按键配置区************************************/
 /***********************在这里编写按键状态获取函数*****************************/
 uint8_t KEY_A_GetIO(void) {
-    return HAL_GPIO_ReadPin(A_GPIO_Port, A_Pin);
+    return LL_GPIO_IsInputPinSet(A_GPIO_Port, A_Pin);
 }
 uint8_t KEY_B_GetIO(void) {
-    return HAL_GPIO_ReadPin(B_GPIO_Port, B_Pin);
+    return LL_GPIO_IsInputPinSet(B_GPIO_Port, B_Pin);
 }
 uint8_t KEY_C_GetIO(void) {
-    return HAL_GPIO_ReadPin(C_GPIO_Port, C_Pin);
+    return LL_GPIO_IsInputPinSet(C_GPIO_Port, C_Pin);
 }
 uint8_t KEY_D_GetIO(void) {
-    return HAL_GPIO_ReadPin(D_GPIO_Port, D_Pin);
+    return LL_GPIO_IsInputPinSet(D_GPIO_Port, D_Pin);
 }
 uint8_t KEY_E_GetIO(void) {
-    return HAL_GPIO_ReadPin(E_GPIO_Port, E_Pin);
+    return LL_GPIO_IsInputPinSet(E_GPIO_Port, E_Pin);
 }
 uint8_t KEY_F_GetIO(void) {
-    return HAL_GPIO_ReadPin(F_GPIO_Port, F_Pin);
+    return LL_GPIO_IsInputPinSet(F_GPIO_Port, F_Pin);
 }
 
 const KeyInfo_t KeyInfo_Array[KeyIndex_Max] = {
@@ -141,8 +141,8 @@ KeyState_t KEY_GetState(KeyIndex_t KeySelector) {
 
 uint8_t KEY_GetDASClick(KeyIndex_t KeySelector) {
     KeyEdge_t Edge = Key_EdgeDetect(KeySelector);
-    if(Edge == KeyEdge_Rising) return 1;
-    if(Edge == KeyEdge_Holding && KeyInfo_Array[KeySelector].DASInterval) return 1;
+    if(Edge == KeyEdge_Rising) return 1;    //有按键按下
+    if(Edge == KeyEdge_Holding && KeyInfo_Array[KeySelector].DASInterval) return 1; //识别到长按的瞬间也触发
     if(KeyInfo_Array[KeySelector].DASInterval && KEY_GetState(KeySelector) == KeyState_LongPress && KeyValue_Array[KeySelector].DebounceCounter == 0){
         KeyValue_Array[KeySelector].DebounceCounter = KeyInfo_Array[KeySelector].DASInterval;
         return 1;

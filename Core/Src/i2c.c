@@ -40,7 +40,7 @@ void MX_I2C2_Init(void)
 
   /* USER CODE END I2C2_Init 1 */
   hi2c2.Instance = I2C2;
-  hi2c2.Init.Timing = 0x00C12166;
+  hi2c2.Init.Timing = 0x00900B2D;
   hi2c2.Init.OwnAddress1 = 0;
   hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
@@ -66,6 +66,10 @@ void MX_I2C2_Init(void)
   {
     Error_Handler();
   }
+
+  /** I2C Fast mode Plus enable
+  */
+  HAL_I2CEx_EnableFastModePlus(I2C_FASTMODEPLUS_I2C2);
   /* USER CODE BEGIN I2C2_Init 2 */
 
   /* USER CODE END I2C2_Init 2 */
@@ -87,7 +91,7 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* i2cHandle)
     PA11 [PA9]     ------> I2C2_SCL
     PA12 [PA10]     ------> I2C2_SDA
     */
-    GPIO_InitStruct.Pin = SCL_Pin|SDA_Pin;
+    GPIO_InitStruct.Pin = GPIO_PIN_11|GPIO_PIN_12;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
     GPIO_InitStruct.Pull = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
@@ -156,9 +160,9 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* i2cHandle)
     PA11 [PA9]     ------> I2C2_SCL
     PA12 [PA10]     ------> I2C2_SDA
     */
-    HAL_GPIO_DeInit(SCL_GPIO_Port, SCL_Pin);
+    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_11);
 
-    HAL_GPIO_DeInit(SDA_GPIO_Port, SDA_Pin);
+    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_12);
 
     /* I2C2 DMA DeInit */
     HAL_DMA_DeInit(i2cHandle->hdmatx);

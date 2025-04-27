@@ -22,8 +22,23 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 extern "C" {
 #endif
 
-extern const unsigned char* logo_allArray[];
-
+extern const unsigned char img_radio[];
+extern const unsigned char img_configuration[];
+extern const unsigned char img_statistics[];
+extern const unsigned char img_album[];
+extern const unsigned char img_user_account[];
+extern const unsigned char img_tetris[];
+extern const unsigned char img_toby_fox[];
+extern const unsigned char img_dinosuar[];
+extern const unsigned char img_snake[];
+extern const unsigned char img_games[];
+extern const unsigned char img_home[];
+extern const unsigned char img_tools[];
+extern const unsigned char img_screen[];
+extern const unsigned char img_burn_in[];
+extern const unsigned char img_date[];
+extern const unsigned char img_scan[];
+    
 #ifdef __cplusplus
 }
 #endif

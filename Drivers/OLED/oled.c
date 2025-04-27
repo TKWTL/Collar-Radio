@@ -41,7 +41,7 @@ uint8_t u8x8_gpio_and_delay_hw(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void 
     return 1;
 }
 
-volatile uint8_t oledbuf[32];
+uint8_t oledbuf[32];
 uint8_t l_oledbuf;
 uint8_t *p_oledbuf;
 uint8_t u8x8_byte_hw_i2c(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr) {
@@ -55,6 +55,7 @@ uint8_t u8x8_byte_hw_i2c(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_p
         break;
         
         case U8X8_MSG_BYTE_SEND:
+            //memcpy(oledbuf, arg_ptr, arg_int);//失败的方法
             p_oledbuf = (uint8_t*)arg_ptr;
             while(arg_int){
                 oledbuf[l_oledbuf++] = *p_oledbuf;
@@ -76,3 +77,4 @@ uint8_t u8x8_byte_hw_i2c(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_p
     }
     return 1;
 }
+

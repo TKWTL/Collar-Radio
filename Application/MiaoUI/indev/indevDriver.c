@@ -40,7 +40,9 @@ UI_ACTION key_mapping_table[][6] = {
     {UI_ACTION_PLUS,UI_ACTION_DOWN, UI_ACTION_UP,   UI_ACTION_BACK, UI_ACTION_ENTER,UI_ACTION_MINUS},//竖屏布局一
     {UI_ACTION_MINUS,UI_ACTION_UP,  UI_ACTION_DOWN, UI_ACTION_BACK, UI_ACTION_ENTER,UI_ACTION_PLUS}//竖屏布局二（反转）
 };
-uint8_t key_layout = 0;
+uint8_t key_layout = 0;//按键布局指示，默认横屏布局一
+
+extern ui_t ui;
 
 UI_ACTION indevScan(void)
 {
@@ -48,6 +50,8 @@ UI_ACTION indevScan(void)
     uint16_t btn;
     osStatus_t status;
     /* 放入你的按键扫描代码 */
+    if(ui.nowItem->page.location->type == UI_PAGE_TEXT) key_layout = 2;
+    else key_layout = 0;
     status = osMessageQueueGet(Button_QueueHandle, &btn, 0, 0);
     if(status == osOK){
         Action = key_mapping_table[key_layout][btn >> 8];

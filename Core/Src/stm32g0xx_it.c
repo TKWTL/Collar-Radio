@@ -24,6 +24,7 @@
 #include "task.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "algorithm.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -92,7 +93,11 @@ void NMI_Handler(void)
 void HardFault_Handler(void)
 {
   /* USER CODE BEGIN HardFault_IRQn 0 */
-
+    //引发HardFault后用于查找到错误地址
+    //来源：https://www.zhihu.com/question/13536848639/answer/111838910932
+    void (*func_ptr)();
+    func_ptr = (void (*)())((uint32_t*)__get_PSP()+ 0x1C);//对于M0+内核，为0x1C
+    func_ptr();
   /* USER CODE END HardFault_IRQn 0 */
   while (1)
   {
@@ -136,10 +141,22 @@ void SysTick_Handler(void)
 void EXTI0_1_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI0_1_IRQn 0 */
-
+    UserOperationDetected();
   /* USER CODE END EXTI0_1_IRQn 0 */
-  HAL_GPIO_EXTI_IRQHandler(B_Pin);
-  HAL_GPIO_EXTI_IRQHandler(E_Pin);
+  if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_0) != RESET)
+  {
+    LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_0);
+    /* USER CODE BEGIN LL_EXTI_LINE_0_FALLING */
+
+    /* USER CODE END LL_EXTI_LINE_0_FALLING */
+  }
+  if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_1) != RESET)
+  {
+    LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_1);
+    /* USER CODE BEGIN LL_EXTI_LINE_1_FALLING */
+
+    /* USER CODE END LL_EXTI_LINE_1_FALLING */
+  }
   /* USER CODE BEGIN EXTI0_1_IRQn 1 */
 
   /* USER CODE END EXTI0_1_IRQn 1 */
@@ -151,9 +168,15 @@ void EXTI0_1_IRQHandler(void)
 void EXTI2_3_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI2_3_IRQn 0 */
-
+    UserOperationDetected();
   /* USER CODE END EXTI2_3_IRQn 0 */
-  HAL_GPIO_EXTI_IRQHandler(C_Pin);
+  if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_3) != RESET)
+  {
+    LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_3);
+    /* USER CODE BEGIN LL_EXTI_LINE_3_FALLING */
+
+    /* USER CODE END LL_EXTI_LINE_3_FALLING */
+  }
   /* USER CODE BEGIN EXTI2_3_IRQn 1 */
 
   /* USER CODE END EXTI2_3_IRQn 1 */
@@ -165,15 +188,64 @@ void EXTI2_3_IRQHandler(void)
 void EXTI4_15_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI4_15_IRQn 0 */
-
+    UserOperationDetected();
   /* USER CODE END EXTI4_15_IRQn 0 */
-  HAL_GPIO_EXTI_IRQHandler(A_Pin);
-  HAL_GPIO_EXTI_IRQHandler(INDET_Pin);
-  HAL_GPIO_EXTI_IRQHandler(STDBY_Pin);
-  HAL_GPIO_EXTI_IRQHandler(F_Pin);
-  HAL_GPIO_EXTI_IRQHandler(CHRG_Pin);
-  HAL_GPIO_EXTI_IRQHandler(INT_Pin);
-  HAL_GPIO_EXTI_IRQHandler(D_Pin);
+  if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_4) != RESET)
+  {
+    LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_4);
+    /* USER CODE BEGIN LL_EXTI_LINE_4_FALLING */
+
+    /* USER CODE END LL_EXTI_LINE_4_FALLING */
+  }
+  if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_5) != RESET)
+  {
+    LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_5);
+    /* USER CODE BEGIN LL_EXTI_LINE_5_FALLING */
+        //Notification_Send(3);
+    /* USER CODE END LL_EXTI_LINE_5_FALLING */
+  }
+  if (LL_EXTI_IsActiveRisingFlag_0_31(LL_EXTI_LINE_5) != RESET)
+  {
+    LL_EXTI_ClearRisingFlag_0_31(LL_EXTI_LINE_5);
+    /* USER CODE BEGIN LL_EXTI_LINE_5_RISING */
+        //Notification_Send(4);
+    /* USER CODE END LL_EXTI_LINE_5_RISING */
+  }
+  if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_6) != RESET)
+  {
+    LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_6);
+    /* USER CODE BEGIN LL_EXTI_LINE_6_FALLING */
+
+    /* USER CODE END LL_EXTI_LINE_6_FALLING */
+  }
+  if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_7) != RESET)
+  {
+    LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_7);
+    /* USER CODE BEGIN LL_EXTI_LINE_7_FALLING */
+
+    /* USER CODE END LL_EXTI_LINE_7_FALLING */
+  }
+  if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_9) != RESET)
+  {
+    LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_9);
+    /* USER CODE BEGIN LL_EXTI_LINE_9_FALLING */
+
+    /* USER CODE END LL_EXTI_LINE_9_FALLING */
+  }
+  if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_10) != RESET)
+  {
+    LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_10);
+    /* USER CODE BEGIN LL_EXTI_LINE_10_FALLING */
+
+    /* USER CODE END LL_EXTI_LINE_10_FALLING */
+  }
+  if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_15) != RESET)
+  {
+    LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_15);
+    /* USER CODE BEGIN LL_EXTI_LINE_15_FALLING */
+
+    /* USER CODE END LL_EXTI_LINE_15_FALLING */
+  }
   /* USER CODE BEGIN EXTI4_15_IRQn 1 */
 
   /* USER CODE END EXTI4_15_IRQn 1 */

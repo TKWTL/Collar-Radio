@@ -24,8 +24,8 @@
  *
  * Created on: 2025-02-08
  */
-#ifndef __VERSION_H
-#define __VERSION_H
+#ifndef __VERSION_H__
+#define __VERSION_H__
 
 #ifdef __cplusplus
 extern "C" {

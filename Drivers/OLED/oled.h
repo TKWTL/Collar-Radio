@@ -5,6 +5,7 @@
 #include "main.h"
 #include "i2c.h"
 #include "u8g2.h"
+#include "string.h"
 
 #define OLED_ADDRESS    0x78
 

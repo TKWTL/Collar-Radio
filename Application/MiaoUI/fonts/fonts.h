@@ -35,7 +35,8 @@ extern "C" {
 
 extern const uint8_t font_menu_main_h12w6[];
 extern const uint8_t font_home_h6w4[];
-
+extern const uint8_t font_h24w12[];
+    
 #ifdef __cplusplus
 }
 #endif

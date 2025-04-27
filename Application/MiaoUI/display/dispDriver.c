@@ -23,11 +23,17 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * Created on: 2025-02-08
+ *TKWTL的注释：
+ *依赖一个外部信号量以实现互斥锁，保护屏幕操作不被打断而呈现出奇怪效果
  */
 #include "dispDriver.h"
-#include "u8g2.h"
+#include "cmsis_os2.h"
 
-extern u8g2_t u8g2;
+int Contrast = 15;//系统亮度
+
+/******************************I/O操作区开始***********************************/
+
+extern osSemaphoreId_t mutex_disp_idleHandle;//屏幕操作中互斥锁信号量声明
 
 /**
  * 初始化显示设备。
@@ -39,6 +45,57 @@ extern u8g2_t u8g2;
 void diapInit(void)
 {
 }
+
+/**
+ * 向OLED发送缓冲区数据
+ * 该函数无参数。
+ * 该函数无返回值。
+ */
+void Disp_SendBuffer(void)
+{
+    osSemaphoreAcquire(mutex_disp_idleHandle, osWaitForever);
+    u8g2_SendBuffer(&u8g2);
+    osSemaphoreRelease(mutex_disp_idleHandle);
+}
+
+/**
+ * 设置OLED显示器的对比度。
+ * 
+ * @param value 对比度值，有效范围通常为0到255，具体取决于硬件的限制。
+ * 
+ * 该函数通过调用u8g2库中的u8g2_SetContrast函数，来设置OLED显示器的对比度。
+ * 使用者需要根据具体的OLED显示器和u8g2配置来选择合适的对比度值。
+ */
+void Disp_SetContrast(ui_t *ui){
+    osSemaphoreAcquire(mutex_disp_idleHandle, osWaitForever);
+    u8g2_SetContrast(&u8g2, Contrast); //调用u8g2库函数设置对比度
+    osSemaphoreRelease(mutex_disp_idleHandle);
+}
+
+void Disp_SetContrast2(uint8_t contrast){
+    osSemaphoreAcquire(mutex_disp_idleHandle, osWaitForever);
+    u8g2_SetContrast(&u8g2, contrast); //调用u8g2库函数设置对比度
+    osSemaphoreRelease(mutex_disp_idleHandle);
+}
+
+/**
+ * 设置OLED电源节省模式
+ * 
+ * 本函数用于根据输入参数启用或禁用OLED的电源节省模式。当is_enable为1时，启用电源节省模式；
+ * 当is_enable为0时，禁用电源节省模式。
+ * 
+ * @param is_enable 一个无符号字符(uint8_t)，用来控制是否启用电源节省模式。
+ *                  当其值为1时，启用电源节省模式；当其值为0时，禁用电源节省模式。
+ */
+void Disp_SetPowerSave(uint8_t is_enable)
+{
+    if(is_enable == 0) LL_GPIO_SetOutputPin(CPEN_GPIO_Port, CPEN_Pin);
+    osSemaphoreAcquire(mutex_disp_idleHandle, osWaitForever);
+    u8g2_SetPowerSave(&u8g2, is_enable); // 调用u8g2库的函数，设置OLED的电源节省模式状态
+    osSemaphoreRelease(mutex_disp_idleHandle);
+    if(is_enable) LL_GPIO_ResetOutputPin(CPEN_GPIO_Port, CPEN_Pin);
+}
+/******************************I/O操作区结束***********************************/
 
 /**
  * 清除OLED显示缓冲区
@@ -57,17 +114,6 @@ void Disp_ClearBuffer(void)
 }
 
 /**
- * 向OLED发送缓冲区数据
- * 该函数无参数。
- * 该函数无返回值。
- */
-void Disp_SendBuffer(void)
-{
-    /* 将U8G2实例的缓冲区数据发送到OLED设备 */
-    u8g2_SendBuffer(&u8g2);
-}
-
-/**
  * 设置OLED显示器的字体。
  * 
  * @param font 指向要使用的字体的指针。该字体必须是提前定义并可用的。
@@ -77,6 +123,11 @@ void Disp_SendBuffer(void)
 void Disp_SetFont(const uint8_t  *font)
 {
     u8g2_SetFont(&u8g2, font); // 设置U8g2实例的字体
+}
+
+//画点函数
+void Disp_DrawPixel(uint16_t x, uint16_t y){
+    u8g2_DrawPixel(&u8g2, x, y);
 }
 
 /**
@@ -92,6 +143,18 @@ void Disp_SetFont(const uint8_t  *font)
 void Disp_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
 {
     u8g2_DrawLine(&u8g2, x1, y1, x2, y2);
+}
+
+/**
+ * 在OLED屏幕上绘制字符
+ * 
+ * @param x 字符串起始绘制的x坐标
+ * @param y 字符串起始绘制的y坐标
+ * @param 要绘制的字符编码
+ * @return 绘制后的光标位置（一般为字符串的结束位置），具体返回值意义可能依赖于u8g2库的实现
+ */
+uint16_t Disp_Putchar(uint16_t x, uint16_t y, uint16_t encoding){
+    return u8g2_DrawGlyph(&u8g2, x, y, encoding);
 }
 
 /**
@@ -196,33 +259,6 @@ void Disp_DrawRBox(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t r)
 void Disp_DrawXBMP(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const uint8_t *bitmap)
 {
     u8g2_DrawXBMP(&u8g2, x, y, w, h, bitmap);
-}
-
-/**
- * 设置OLED显示器的对比度。
- * 
- * @param value 对比度值，有效范围通常为0到255，具体取决于硬件的限制。
- * 
- * 该函数通过调用u8g2库中的u8g2_SetContrast函数，来设置OLED显示器的对比度。
- * 使用者需要根据具体的OLED显示器和u8g2配置来选择合适的对比度值。
- */
-void Disp_SetContrast(ui_t *ui)
-{
-    u8g2_SetContrast(&u8g2, *(uint8_t *)ui->nowItem->element->data->ptr); // 调用u8g2库函数设置对比度
-}
-
-/**
- * 设置OLED电源节省模式
- * 
- * 本函数用于根据输入参数启用或禁用OLED的电源节省模式。当is_enable为1时，启用电源节省模式；
- * 当is_enable为0时，禁用电源节省模式。
- * 
- * @param is_enable 一个无符号字符(uint8_t)，用来控制是否启用电源节省模式。
- *                  当其值为1时，启用电源节省模式；当其值为0时，禁用电源节省模式。
- */
-void Disp_SetPowerSave(ui_t *ui)
-{
-    u8g2_SetPowerSave(&u8g2, *(uint8_t *)ui->nowItem->element->data->ptr); // 调用u8g2库的函数，设置OLED的电源节省模式状态
 }
 
 /**

@@ -1,0 +1,2 @@
+1.修改了文件u8x8_d_ssd1306_128x64_noname.c中的u8x8_d_ssd1306_128x64_noname_powersave0_seq与u8x8_d_ssd1306_128x64_noname_powersave1_seq，
+使其开关电荷泵，进一步减小功耗

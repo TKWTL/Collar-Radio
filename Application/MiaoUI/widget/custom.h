@@ -33,8 +33,8 @@ extern "C" {
 
 #include "ui.h"
 #include "ui_conf.h"
-
-void Draw_Home(ui_t *ui);
+    
+void Radio_Run(ui_t *ui);
 void Show_Version(ui_t *ui);
 void Show_Logo(ui_t *ui);
 void TaskLvel_Setting(ui_t *ui);

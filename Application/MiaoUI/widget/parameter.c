@@ -45,15 +45,15 @@ void ParameterSetting_Widget(ui_t *ui)
     }
     #endif
     
-    if (Dialog_Show(ui, x, y, w, h))
+    if(Dialog_Show(ui, x, y, w, h))
     {
         switch (ui->action)
         {
-        case UI_ACTION_DOWN:
+        case UI_ACTION_PLUS:
             Draw_Scrollbar(ui, x + 4, y + 18, w - 12, 6, 3, Step);
             if(ui->nowItem->element->data->function != NULL && ui->nowItem->element->data->functionType == UI_DATA_FUNCTION_STEP_EXECUTE)ui->nowItem->element->data->function(ui);
             break;
-        case UI_ACTION_UP:
+        case UI_ACTION_MINUS:
             Step = -Step;
             Draw_Scrollbar(ui, x + 4, y + 18, w - 12, 6, 3, Step);
             if(ui->nowItem->element->data->function != NULL && ui->nowItem->element->data->functionType == UI_DATA_FUNCTION_STEP_EXECUTE)ui->nowItem->element->data->function(ui);
@@ -62,7 +62,9 @@ void ParameterSetting_Widget(ui_t *ui)
             Draw_Scrollbar(ui, x + 4, y + 18, w - 12, 6, 3, 0);
             break;
         }
-        if(ui->nowItem->element->data->name == NULL) ui->nowItem->element->data->name = "Null name";
+        
+        if(ui->nowItem->element->data->name == NULL) ui->nowItem->element->data->name = "Null!!";
+        
         switch (ui->nowItem->element->data->dataType)
         {
         case UI_DATA_INT:
@@ -87,7 +89,7 @@ void ParameterSetting_Widget(ui_t *ui)
 void Switch_Widget(ui_t *ui)
 {
     *(uint8_t *)ui->nowItem->element->data->ptr = ! *(uint8_t *)ui->nowItem->element->data->ptr; // 切换开关状态
-    if(ui->nowItem->element->data->function != NULL)ui->nowItem->element->data->function(ui);
+    if(ui->nowItem->element->data->function != NULL) ui->nowItem->element->data->function(ui);
     #if ( UI_USE_FREERTOS == 1 )
     if(ui->nowItem->element->data->dataRootTask != NULL)
     {

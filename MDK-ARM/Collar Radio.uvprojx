@@ -338,9 +338,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>STM32G070xx,USE_HAL_DRIVER,CMSIS_device_header=&lt;stm32g0xx.h&gt;</Define>
+              <Define>STM32G070xx,USE_HAL_DRIVER,CMSIS_device_header=&lt;stm32g0xx.h&gt;,USE_FULL_LL_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32G0xx_HAL_Driver/Inc;../Drivers/CMSIS/Device/ST/STM32G0xx/Include;../Drivers/CMSIS/Include;../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy;../Drivers/OLED;../Drivers/SC7A20;../Drivers/RDA5807M;../Drivers/BMP180;../Drivers/u8g2;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM0;../Application;../Application/MiaoUI;../Application/MiaoUI/core;../Application/MiaoUI/display;../Application/MiaoUI/fonts;../Application/MiaoUI/widget;../Application/MiaoUI/indev;../Application/MiaoUI/images;../Drivers/Buttons</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32G0xx_HAL_Driver/Inc;../Drivers/CMSIS/Device/ST/STM32G0xx/Include;../Drivers/CMSIS/Include;../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy;../Drivers/OLED;../Drivers/SC7A20;../Drivers/RDA5807M;../Drivers/BMP180;../Drivers/u8g2;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM0;../Application;../Application/MiaoUI;../Application/MiaoUI/core;../Application/MiaoUI/display;../Application/MiaoUI/fonts;../Application/MiaoUI/widget;../Application/MiaoUI/indev;../Application/MiaoUI/images;../Drivers/Buttons;../Application/Applications;../Application/Tasks;../Application/Algorithms</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -858,6 +858,118 @@
           <GroupName>Drivers/STM32G0xx_HAL_Driver</GroupName>
           <Files>
             <File>
+              <FileName>stm32g0xx_ll_gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_ll_gpio.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>stm32g0xx_ll_exti.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_ll_exti.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
               <FileName>stm32g0xx_hal_adc.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_adc.c</FilePath>
@@ -975,6 +1087,67 @@
               <FilePath>../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_ll_adc.c</FilePath>
             </File>
             <File>
+              <FileName>stm32g0xx_ll_rcc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_ll_rcc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32g0xx_ll_utils.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_ll_utils.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
               <FileName>stm32g0xx_hal_rcc.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_hal_rcc.c</FilePath>
@@ -1085,11 +1258,6 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
-            </File>
-            <File>
-              <FileName>stm32g0xx_ll_rcc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_ll_rcc.c</FilePath>
             </File>
             <File>
               <FileName>stm32g0xx_hal_flash.c</FileName>
@@ -2227,6 +2395,11 @@
               <FileType>1</FileType>
               <FilePath>..\Drivers\BMP180\bmp180.c</FilePath>
             </File>
+            <File>
+              <FileName>rda5807m.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\RDA5807M\rda5807m.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2864,37 +3037,32 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Application</GroupName>
+          <GroupName>Applications</GroupName>
           <Files>
             <File>
-              <FileName>sys_shutdown.c</FileName>
+              <FileName>radio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Application\sys_shutdown.c</FilePath>
+              <FilePath>..\Application\Applications\radio.c</FilePath>
             </File>
             <File>
-              <FileName>adc_handle.c</FileName>
+              <FileName>game_snake.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Application\adc_handle.c</FilePath>
+              <FilePath>..\Application\Applications\game_snake.c</FilePath>
             </File>
             <File>
-              <FileName>menu.c</FileName>
+              <FileName>notifications_draw.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Application\menu.c</FilePath>
+              <FilePath>..\Application\Applications\notifications_draw.c</FilePath>
             </File>
             <File>
-              <FileName>ui_conf.c</FileName>
+              <FileName>burn_in_tester.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Application\MiaoUI\ui_conf.c</FilePath>
+              <FilePath>..\Application\Applications\burn_in_tester.c</FilePath>
             </File>
             <File>
-              <FileName>bmp180_handle.c</FileName>
+              <FileName>i2c_scanner.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Application\bmp180_handle.c</FilePath>
-            </File>
-            <File>
-              <FileName>button_handle.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Application\button_handle.c</FilePath>
+              <FilePath>..\Application\Applications\i2c_scanner.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2922,11 +3090,6 @@
               <FilePath>..\Application\MiaoUI\indev\indevDriver.c</FilePath>
             </File>
             <File>
-              <FileName>custom.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Application\MiaoUI\widget\custom.c</FilePath>
-            </File>
-            <File>
               <FileName>parameter.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Application\MiaoUI\widget\parameter.c</FilePath>
@@ -2945,6 +3108,76 @@
               <FileName>image.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Application\MiaoUI\images\image.c</FilePath>
+            </File>
+            <File>
+              <FileName>ui_conf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\MiaoUI\ui_conf.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Tasks</GroupName>
+          <Files>
+            <File>
+              <FileName>adc_handle.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\Tasks\adc_handle.c</FilePath>
+            </File>
+            <File>
+              <FileName>bmp180_handle.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\Tasks\bmp180_handle.c</FilePath>
+            </File>
+            <File>
+              <FileName>button_handle.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\Tasks\button_handle.c</FilePath>
+            </File>
+            <File>
+              <FileName>menu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\Tasks\menu.c</FilePath>
+            </File>
+            <File>
+              <FileName>sys_shutdown.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\Tasks\sys_shutdown.c</FilePath>
+            </File>
+            <File>
+              <FileName>notifications.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\Tasks\notifications.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Algorithms</GroupName>
+          <Files>
+            <File>
+              <FileName>time.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\Algorithms\time.c</FilePath>
+            </File>
+            <File>
+              <FileName>radio_operation.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\Algorithms\radio_operation.c</FilePath>
+            </File>
+            <File>
+              <FileName>system_statistic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\Algorithms\system_statistic.c</FilePath>
+            </File>
+            <File>
+              <FileName>system_operation.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\Algorithms\system_operation.c</FilePath>
+            </File>
+            <File>
+              <FileName>display_effects.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\Algorithms\display_effects.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -54,7 +54,7 @@ extern "C" {
 // 图片大小
 #define UI_IMG_WIDTH   30
 #define UI_IMG_HEIGHT  30
-// 图片间距
+// 图片间距，即两张图片右上角的横坐标差值
 #define UI_IMAGE_SPACE   40
 // 文本页面标题名称显示区域
 #define UI_TITLE_X0     0
@@ -91,22 +91,19 @@ typedef void (*ui_item_function)(ui_pt);
 
 #define ui_data_function ui_item_function
 
-typedef enum
-{
+typedef enum{
     UI_DATA_FUNCTION_EXIT_EXECUTE,   // 退出执行
     UI_DATA_FUNCTION_STEP_EXECUTE    // 步进执行
 } UI_DATA_FUNCTION_TYPE;
 
-typedef enum
-{
+typedef enum{
     UI_DATA_INT,      // 整型数据
     UI_DATA_FLOAT,     // 浮点型数据
     UI_DATA_SWITCH,    // 开关类型数据
     UI_DATA_STRING     // 字符串类型数据
 } UI_DATA_TYPE;
 
-typedef enum
-{
+typedef enum{
     UI_DATA_ACTION_RO,     // 只读
     UI_DATA_ACTION_RW     // 读写
 } UI_DATA_ACTION_TYPE;
@@ -144,8 +141,7 @@ typedef struct {
  * ui_animation_param_t 结构体定义
  * 用于存储PID控制器的误差及调整参数
  */
-typedef struct
-{
+typedef struct{
     float kp;         // 比例增益
     float ki;         // 积分增益
     float kd;         // 微分增益
@@ -157,8 +153,7 @@ typedef struct
  * @brief 
  * 
  */
-typedef struct
-{
+typedef struct{
     ui_animation_param_t optionbar_ani;
     ui_animation_param_t optionbarPos_ani;
     ui_animation_param_t cursor_ani;
@@ -168,8 +163,7 @@ typedef struct
 }ui_animation_t;
 
 // 菜单状态枚举: 定义了菜单及应用程序的不同运行状态
-typedef enum
-{
+typedef enum{
     UI_PAGE_INIT,       // 菜单初始化状态
     UI_PAGE_DRAWING,    // 菜单绘制状态
     UI_PAGE_RUNING,        // 菜单运行状态
@@ -219,8 +213,7 @@ typedef enum
 } UI_ITEM_TYPE;
 
 // 页面类型枚举
-typedef enum
-{
+typedef enum{
     // 文本类型
     UI_PAGE_TEXT,
     // 图像类型
@@ -229,8 +222,7 @@ typedef enum
 
 
 #if ( UI_TITLE_ROLL == 1 )
-typedef enum
-{
+typedef enum{
     // 停止滚动
     UI_ITEM_ROLL_STOP,
     // 向前滚动
@@ -241,8 +233,7 @@ typedef enum
 #endif
 
 // 光标运动参数
-typedef struct
-{
+typedef struct{
     // 当前宽度
     int nowWide;
     // 当前行坐标
@@ -258,8 +249,7 @@ typedef struct
 } ui_cursor_param_t;
 
 // 对话框运动参数
-typedef struct
-{
+typedef struct{
     // 对话框初始宽度
     uint16_t nowWide;
     // 对话框初始高度
@@ -295,17 +285,18 @@ typedef struct
  * 用于表示页面信息
  */
 typedef struct ui_page_t {
-    const char *pageName;      // 页面名称，使用指针存储
-    UI_PAGE_TYPE type;         // 页面类型
-    UI_PAGE_STATE pageState;    // 页面的状态
+    const char *pageName;           // 页面名称，使用指针存储
+    UI_PAGE_TYPE type;              // 页面类型
+    UI_PAGE_STATE pageState;        // 页面的状态
     // 使用内联函数封装成员变量，以提供更高的数据封装性和保护性
     struct {
-        ui_item_pt parent;         // 父级项
-        ui_item_pt head;           // 头部项
-        ui_item_pt tail;           // 尾部项
+        ui_item_pt parent;          // 父级项
+        ui_item_pt head;            // 头部项
+        ui_item_pt tail;            // 尾部项
         ui_item_pt lastJumpItem;
     } item;
-    int length;            // 页面长度
+    ui_page_pt parentPage;          //父页面
+    int length;                     // 页面长度
     int jumpX;
     int jumpY;
     int cursorLastColumn;

@@ -25,13 +25,11 @@
  * Created on: 2025-02-08
  */
 #include "custom.h"
-#include "dispDriver.h"
-#include "indevDriver.h"
 #include <stdio.h>
 #include "image.h"
 #include "version.h"
 
-#include "application.h""
+#include "application.h"
 
 #if ( UI_USE_FREERTOS == 1 )
 #include "FreeRTOS.h"
@@ -65,7 +63,6 @@ const unsigned char AUTHOR [] = {
 	0x29, 0x3c, 0xf3, 0xff, 0x02, 0x00, 0x85, 0x80, 0xff, 0xff, 0x06, 0x00, 0x00, 0x80, 0xfb, 0x7f, 
 	0x0f, 0x00, 0x00, 0x80, 0xff, 0x7f, 0x47, 0x00
 };
-
 void Show_Version(ui_t *ui)
 {
     int16_t value = -128;
@@ -107,15 +104,6 @@ void Show_Version(ui_t *ui)
         #if ( UI_USE_FREERTOS == 1 )
         vTaskDelay(pdMS_TO_TICKS(10));
         #endif
-    }
-}
-
-void Radio_Run(ui_t *ui){
-    static uint16_t frequency = 8830;
-    static uint8_t isPresetChannel = 0;//模式，为0时为频率模式，为1时为频道模式
-    while(1){
-        Disp_ClearBuffer();
-        Disp_SendBuffer();
     }
 }
 

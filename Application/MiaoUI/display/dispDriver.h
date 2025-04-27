@@ -32,13 +32,26 @@ extern "C" {
 #endif
 
 #include "stdint.h"
+#include "u8g2.h"
 #include "ui_conf.h"
+#include "main.h"
+    
+//U8G2句柄
+extern u8g2_t u8g2;
 
+extern int Contrast;//系统亮度
+    
 void diapInit(void);
-void Disp_ClearBuffer(void);
 void Disp_SendBuffer(void);
+void Disp_SetContrast(ui_t *ui);
+void Disp_SetContrast2(uint8_t contrast);
+void Disp_SetPowerSave(uint8_t is_enable);
+    
+void Disp_ClearBuffer(void);
 void Disp_SetFont(const uint8_t  *font);
+void Disp_DrawPixel(uint16_t x, uint16_t y);//画点函数
 void Disp_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
+uint16_t Disp_Putchar(uint16_t x, uint16_t y, uint16_t encoding);
 uint16_t Disp_DrawStr(uint16_t x, uint16_t y, const char *str);
 void Disp_SetDrawColor(void *color);
 void Disp_DrawFrame(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
@@ -46,8 +59,6 @@ void Disp_DrawRFrame(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t r)
 void Disp_DrawBox(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
 void Disp_DrawRBox(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t r);
 void Disp_DrawXBMP(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const uint8_t *bitmap);
-void Disp_SetContrast(ui_t *ui);
-void Disp_SetPowerSave(ui_t *ui);
 uint8_t Disp_GetBufferTileHeight(void);
 uint8_t Disp_GetBufferTileWidth(void);
 uint8_t *Disp_GetBufferPtr(void);
