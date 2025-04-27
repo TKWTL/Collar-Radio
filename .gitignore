@@ -30,6 +30,8 @@ Examples/
 !*.bin
 !*.hex
 
+nul
+
 #JLINK file
 JLinkLog.txt
 *.dbgconf
