@@ -15,7 +15,7 @@ uint16_t Register[6] = {
     (RDA5807_REG02_DHIZ| RDA5807_REG02_DMUTE| RDA5807_REG02_BASS| RDA5807_REG02_RDIM| RDA5807_REG02_SEEKUP| RDA5807_REG02_SKMODE| RDA5807_REG02_CKMD_32K| RDA5807_REG02_NDME| RDA5807_REG02_ENABLE),
     (RDA5807_REG03_TUNE| RDA5807_REG03_BAND0| RDA5807_REG03_100K),
     0x0040,
-    0x8880,
+    (RDA5807_REG05_INTM| (RDA5807_REG05_SKTH_MSK& 0x0800)| 0x0080| (RDA5807_REG05_VOL_MSK& 0x0000)),
     0x8000,
     0x5F1A
 };//初始化，频率预设要把tune打开
@@ -101,10 +101,10 @@ uint8_t RDA5807_CheckSTC(void)
  * 更新日期：2021-1-1
  ******************************************************************************/
 void RDA5807_Init(void){ 
-    FM_WR_Reg(RDA5807_REG02, RDA5807_REG02_SRST);    //SOFT_RESET，32.768kHz，New Demodulate Method Enable, can improve the receive sensitivity about 1dB.
-    vTaskDelay(pdMS_TO_TICKS(50));
+    FM_WR_Reg(RDA5807_REG02, RDA5807_REG02_SRST);    //SOFT_RESET
+    osDelay(pdMS_TO_TICKS(50));
     FM_WR_Reg(RDA5807_REG02, Register[0]);           //Power Up，Audio Output High-Z高阻:Normal operation;不静音;
-    vTaskDelay(pdMS_TO_TICKS(600));
+    osDelay(pdMS_TO_TICKS(400));
     FM_WR_Reg(RDA5807_REG03, Register[1]);           //初始化频率，
     FM_WR_Reg(RDA5807_REG04, Register[2]);           //Bit[11]:De-emphasis（去加重:解调后对高频分量的压低）：50us；Bit[9]:softmute；Bit[8]:AFC自动频率控制
     FM_WR_Reg(RDA5807_REG05, Register[3]);           //SEEKTH[11:8]:搜台信噪比阈值；VOLUME[3:0]:DAC Gain Control Bits音量控制
@@ -440,7 +440,10 @@ void RDA5807_PowerOn(void)
 {
     LL_RCC_ConfigMCO(LL_RCC_MCO1SOURCE_LSE, LL_RCC_MCO1_DIV_1);//开启外部的时钟源以降低功耗
     Register[0] |= (RDA5807_REG02_ENABLE| RDA5807_REG02_DMUTE| RDA5807_REG02_DHIZ);
+    Register[0] &= ~RDA5807_REG02_SEEK;                       //SEEK位清零
+    Register[1] |= RDA5807_REG03_TUNE;                       //Tune位置一
     FM_WR_Reg(RDA5807_REG02, Register[0]);
+    FM_WR_Reg(RDA5807_REG03,Register[1]);
 }
 
 /*******************************************************************************
@@ -469,10 +472,8 @@ void RDA5807_SeekThSet(uint8_t RSSI)
  ******************************************************************************/
 void RDA5807_SeekDirection(uint8_t Direction)
 {
-  if (Direction == SEEK_DOWN)
-    Register[0] &= ~RDA5807_REG02_SEEKUP;
-  else
-    Register[0] |= RDA5807_REG02_SEEKUP;
+  if (Direction == SEEK_DOWN) Register[0] &= ~RDA5807_REG02_SEEKUP;
+  else Register[0] |= RDA5807_REG02_SEEKUP;
   FM_WR_Reg(RDA5807_REG02,Register[0]);
 }
 
@@ -483,7 +484,13 @@ void RDA5807_StartSeek(void){
         FM_WR_Reg(RDA5807_REG02,Register[0]);
         FM_WR_Reg(RDA5807_REG03,Register[1]);
     }
-    return;
+}
+
+void RDA5807_InterruptSeek(void){
+    Register[0] &= ~RDA5807_REG02_SEEK;                       //SEEK位清零
+    Register[1] |= RDA5807_REG03_TUNE;                       //Tune位置一
+    FM_WR_Reg(RDA5807_REG02,Register[0]);
+    FM_WR_Reg(RDA5807_REG03,Register[1]);
 }
 
 /*******************************************************************************

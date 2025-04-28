@@ -18,29 +18,97 @@ const uint8_t speaker[] = {//音量图片，XBM格式
 };
 
 #define MAX_STATION_NUM 50  //最大存台数量
-uint16_t station_freq[MAX_STATION_NUM];//静态存储电台频率的数组
+uint16_t station_freq[MAX_STATION_NUM];//静态存储电台频率的数组，低频率的索引值较小
 uint8_t station_num = 0;//数组中有效电台的数目
+uint8_t global_seeking = 0;//全局搜索标志位
 
-RadioPowerState_t RadioPowerMode = RADIO_ON;
+/*查询数组中是否存在该电台频率
+ *存在返回1，否则返回0
+ */
+uint8_t Station_IsExist(uint16_t frequency){
+    uint8_t i;
+    for (i = 0; i < station_num; i++) {
+        if (station_freq[i] == frequency) return 1;
+        if (station_freq[i] > frequency) return 0; //利用升序提前退出
+    }
+    return 0;
+}
 
+/*向数组中插入一个电台频率
+ *成功插入返回1，否则返回0
+ *超过最大电台数量或已有此频率时插入失败
+ */
+uint8_t Station_Insert(uint16_t frequency){
+    uint8_t i, j;
+    if(station_num >= MAX_STATION_NUM) return 0; //检查是否超过最大电台数量
+    for(i = 0;i < station_num; i++){
+        if(station_freq[i] == frequency) return 0;//已有该频率，无法插入
+        else if(station_freq[i] > frequency){
+            //在i位置插入，需移位
+            for(j = station_num; j > i; j--){
+                station_freq[j] = station_freq[j-1];
+            }
+            station_freq[i] = frequency;
+            station_num++;
+            return 1; //插入成功
+        }
+    }
+    //插入到末尾
+    station_freq[station_num] = frequency;
+    station_num++;
+    return 1; //插入成功
+}
+
+/*向数组中移除一个电台频率
+ *成功移除返回1，否则返回0
+ *超过电台数量为0或没有此频率时移除失败
+ */
+uint8_t Station_Remove(uint16_t frequency){
+    uint8_t i, j;
+    for(i = 0; i < station_num; i++){
+        if(station_freq[i] == frequency){
+            //找到频率，删除
+            for(j = i; j < station_num - 1; j++){
+                station_freq[j] = station_freq[j + 1];
+            }
+            station_num--;
+            return 1; //删除成功了
+        }
+        else if(station_freq[i] > frequency) return 0;//由于数组已排序，frequency不在数组中
+    }
+    return 0;//未找到
+}
+
+/*启动一次全局搜索
+ */
+void InitGlobalSeek(void){
+    global_seeking = 1;
+    station_num = 0;
+    RDA5807_SetFreq(87* 40);
+    RDA5807_SeekDirection(SEEK_UP);
+    RDA5807_StartSeek();
+}
+
+//用于管理RDA5807芯片开关状态的接口变量
+RadioPowerState_t RadioPowerMode = RADIO_AUTO;
+
+//收音机运行的界面函数，处理显示与按键
 void Radio_Run(ui_t *ui){
-    static uint16_t frequency = 86* 40;//频率，单位25KHz
-    static uint8_t seek_dir = SEEK_DOWN;//默认向下搜台
-    static uint8_t freq_align;//屏幕居中对齐用变量
-    static uint16_t volume = 0;//音量
-    static uint8_t isSeeking = 0;
-    char buf[16];//显示用缓冲区数组
-    uint8_t color;//设置颜色
-    uint8_t batterylvl;//电池实际显示格数，用于实现充电动效
+    char buf[16];                                                               //显示用缓冲区数组
+    uint8_t color;                                                              //设置颜色
     
-    int16_t disp_value1 = 12;//动效变量
-    static RadioMode_t RadioMode = MODE_SEARCH;//收音机模式
-    uint8_t setting_mode = 0;//设置位切换标志
-    uint8_t menu_index = 0;//设置项位置
+    static uint16_t frequency = 87* 40;                                         //频率，单位25KHz
+    static uint8_t freq_align;                                                  //屏幕居中对齐用变量
+    static uint16_t volume = 0;                                                 //音量
+    static uint8_t isSeeking = 0;                                               //是否在搜台/调谐中
+    uint8_t batterylvl;                                                         //电池实际显示格数，用于实现充电动效
+    int16_t disp_value1 = 12;                                                   //动效变量
+    static RadioMode_t RadioMode = MODE_SEARCH;                                 //收音机的模式
+    uint8_t setting_mode = 0;                                                   //设置位切换标志
+    uint8_t menu_index = 0;                                                     //设置项位置
     
     
     while(1){
-        /***************************屏幕显示区*********************************/
         //两种颜色下的清屏
         Disp_SetDrawColor(&ui->bgColor);
         Disp_DrawBox(0, 0, UI_HOR_RES, UI_VER_RES);
@@ -55,7 +123,8 @@ void Radio_Run(ui_t *ui){
             //频率信息显示
             Disp_SetFont(font_h24w12);
             if(isSeeking){
-                Disp_DrawStr(12,37, "Seeking...");
+                if(RadioMode == MODE_FREQ) Disp_DrawStr(12,37, "Tuning....");
+                else Disp_DrawStr(12,37, "Seeking...");
                 Disp_SetFont(font_menu_main_h12w6);
             }
             else{
@@ -70,10 +139,17 @@ void Radio_Run(ui_t *ui){
                 Disp_SetFont(font_menu_main_h12w6);
                 Disp_DrawStr(63+ freq_align* 6, 38, "MHz");
             }
-            Disp_DrawPixel((frequency- 3440)* 5/ 36, 43);
+            //显示频率条
+            Disp_DrawPixel((frequency- 3440)* 5/ 36, 43);//以点的形式显示当前频率
             Disp_DrawLine(0, 45, UI_HOR_RES, 45);
+            for(batterylvl = 0; batterylvl < station_num; batterylvl++){
+                Disp_DrawPixel((station_freq[batterylvl]- 3440)* 5/ 36, 47);//以点的形式显示已存台
+                if(station_freq[batterylvl] == frequency)
+                    Disp_DrawPixel((frequency- 3440)* 5/ 36, 46);//当前频率等于一个预设台时额外标识出来
+                    Disp_DrawPixel((frequency- 3440)* 5/ 36, 48);
+            }
             
-            disp_value1 = (int16_t)UI_Animation(0, (float)disp_value1, &ui->animation.scrollbar_ani);
+            disp_value1 = (int16_t)UI_Animation(0, (float)disp_value1, &ui->animation.cursor_ani);
             //信号信息显示
             Disp_DrawXBMP(1, 1- disp_value1, 7, 9, signal);
             sprintf(buf, ":%d", RDA5807_GetSigLvl());
@@ -108,38 +184,61 @@ void Radio_Run(ui_t *ui){
         
             
             switch(indevScan()){
-                case UI_ACTION_BACK:
+                case UI_ACTION_BACK://退出收音机操作界面（收音机仍在后台运行）
                     ui->action = UI_ACTION_ENTER;
                     return;
-                case UI_ACTION_UP:
+                case UI_ACTION_UP://减小频率
                     switch(RadioMode){
                         case MODE_SEARCH:
-                            if(seek_dir != SEEK_DOWN){
-                                seek_dir = SEEK_DOWN;
-                                RDA5807_SeekDirection(seek_dir);
+                            if(isSeeking == 0){
+                                RDA5807_SeekDirection(SEEK_DOWN);
+                                RDA5807_StartSeek();
                             }
-                            RDA5807_StartSeek();
+                            else RDA5807_InterruptSeek();
                             break;
                         case MODE_STA:
+                            if(station_num == 0) InitGlobalSeek();//没有预存台时立刻开始一次全局搜索
+                            else if(global_seeking == 1) global_seeking = 0;//全局搜索中则暂停搜台
+                            else{
+                                batterylvl = 0;  
+                                while(batterylvl < station_num && station_freq[batterylvl] < frequency) batterylvl++;  
+                                frequency = (batterylvl == 0) ? station_freq[station_num- 1] : station_freq[batterylvl- 1];//若无更小频率，循环到最后一个电台
+                                RDA5807_SetFreq(frequency);
+                            }
                             break;
                         case MODE_FREQ:
+                            if(frequency <= 87* 40) frequency = 108* 40;
+                            else frequency -= 4;
+                            RDA5807_SetFreq(frequency);
                             break;
                         default:
                             break;
                     }
                     break;
-                case UI_ACTION_DOWN:
+                case UI_ACTION_DOWN://增大频率
                     switch(RadioMode){
                         case MODE_SEARCH:
-                            if(seek_dir != SEEK_UP){
-                                seek_dir = SEEK_UP;
-                                RDA5807_SeekDirection(seek_dir);
+                            if(isSeeking == 0){
+                                RDA5807_SeekDirection(SEEK_UP);
+                                RDA5807_StartSeek();
                             }
-                            RDA5807_StartSeek();
+                            else RDA5807_InterruptSeek();
                             break;
                         case MODE_STA:
+                            if(station_num == 0) InitGlobalSeek();//没有预存台时立刻开始一次全局搜索
+                            else if(global_seeking == 1) global_seeking = 0;//全局搜索中则暂停搜台
+                            else{
+                                for(batterylvl = 0; batterylvl < station_num; batterylvl++) 
+                                    if(station_freq[batterylvl] > frequency) 
+                                        break;
+                                frequency = station_freq[(batterylvl < station_num) ? batterylvl : 0];// 若无更大频率，循环到第一个电台
+                                RDA5807_SetFreq(frequency);
+                            }
                             break;
                         case MODE_FREQ:
+                            if(frequency >= 108* 40) frequency = 87* 40;
+                            else frequency += 4;
+                            RDA5807_SetFreq(frequency);
                             break;
                         default:
                             break;
@@ -151,14 +250,25 @@ void Radio_Run(ui_t *ui){
                 case UI_ACTION_MINUS:
                     volume = RDA5807_DecVolume();
                     break;
-                case UI_ACTION_ENTER:
+                case UI_ACTION_ENTER://进入设置页面
                     setting_mode = 1;
+                    global_seeking = 0;
                     break;
                 case UI_ACTION_NONE:
                     break;
             }
+            if(global_seeking){//触发了全局扫描，该操作无法在设置页面进行
+                if(isSeeking == 0){
+                    Station_Insert(frequency);
+                    RDA5807_StartSeek();
+                }
+                if(station_num >= MAX_STATION_NUM || frequency >= 108* 40){//达到最大电台数量或到达频率最大值
+                    global_seeking = 0;
+                    RDA5807_InterruptSeek();
+                }
+            }
         }
-        else{
+        else{//设置页面
             Disp_SetFont(font_menu_main_h12w6);
             Disp_DrawLine(0, 6, UI_HOR_RES, 6);
             Disp_DrawStr(28, 10, "Radio Setting");
@@ -178,19 +288,18 @@ void Radio_Run(ui_t *ui){
             Disp_DrawStr(1, 49, "*Radio Mode:");
             switch(RadioMode){
                 case MODE_SEARCH:
-                    Disp_DrawStr(73, 49, "Search");
-                    Disp_DrawStr(1, 62, "*Add to station List");
-                    break;
                 case MODE_FREQ:
-                    Disp_DrawStr(73, 49, "Frequency");
-                    Disp_DrawStr(1, 62, "*Add to station List");
+                    if(RadioMode == MODE_SEARCH) Disp_DrawStr(73, 49, "Search");
+                    else Disp_DrawStr(73, 49, "Frequency");
+                    if(Station_IsExist(frequency)) Disp_DrawStr(1, 62, "*Remove from List");
+                    else Disp_DrawStr(1, 62, "*Add to station List");
                     break;
                 case MODE_STA:
                     Disp_DrawStr(73, 49, "Preset");
-                    Disp_DrawStr(1, 62, "*Clear and Seek");
+                    Disp_DrawStr(1, 62, "*All Clear and Seek");
                     break;
             }
-            disp_value1 = (int16_t)UI_Animation((menu_index+ 1)* 13, (float)disp_value1, &ui->animation.scrollbar_ani);
+            disp_value1 = (int16_t)UI_Animation((menu_index+ 1)* 13, (float)disp_value1, &ui->animation.cursor_ani);
             color = 0x02;
             Disp_SetDrawColor(&color);
             Disp_DrawRBox(0, disp_value1, UI_HOR_RES, 12, 0);
@@ -228,6 +337,17 @@ void Radio_Run(ui_t *ui){
                             if(RadioMode == MODE_FREQ) RadioMode = MODE_SEARCH;
                             else RadioMode++;
                             break;
+                        case 3:
+                            if(RadioMode == MODE_STA){//立刻启动扫描并退回主界面
+                                InitGlobalSeek();
+                                setting_mode = 0;
+                                disp_value1 = 12;
+                            }
+                            else{
+                                if(Station_IsExist(frequency) == 0) Station_Insert(frequency);
+                                else Station_Remove(frequency);
+                            }
+                            break;
                     }
                     break;
                 case UI_ACTION_NONE:
@@ -237,6 +357,6 @@ void Radio_Run(ui_t *ui){
 
         Disp_SendBuffer();
         osDelay(pdMS_TO_TICKS(10));
-    }
+    }//while(1) end
 }
 

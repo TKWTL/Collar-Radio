@@ -78,6 +78,7 @@ extern UART_HandleTypeDef huart1;
 void NMI_Handler(void)
 {
   /* USER CODE BEGIN NonMaskableInt_IRQn 0 */
+    NVIC_SystemReset();
 
   /* USER CODE END NonMaskableInt_IRQn 0 */
   /* USER CODE BEGIN NonMaskableInt_IRQn 1 */
@@ -93,11 +94,7 @@ void NMI_Handler(void)
 void HardFault_Handler(void)
 {
   /* USER CODE BEGIN HardFault_IRQn 0 */
-    //引发HardFault后用于查找到错误地址
-    //来源：https://www.zhihu.com/question/13536848639/answer/111838910932
-    void (*func_ptr)();
-    func_ptr = (void (*)())((uint32_t*)__get_PSP()+ 0x1C);//对于M0+内核，为0x1C
-    func_ptr();
+    NVIC_SystemReset();
   /* USER CODE END HardFault_IRQn 0 */
   while (1)
   {

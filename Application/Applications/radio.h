@@ -9,14 +9,14 @@ extern "C" {
 #include "application.h"
     
 typedef enum{
-    MODE_SEARCH,
-    MODE_STA,
-    MODE_FREQ
+    MODE_SEARCH,//动态搜台
+    MODE_STA,//预设频道
+    MODE_FREQ//频率调节
 }RadioMode_t;
 
 typedef enum {
     RADIO_ON,
-    RADIO_AUTO,
+    RADIO_AUTO,//根据耳机插入状态自动开关
     RADIO_OFF
 }RadioPowerState_t;
 

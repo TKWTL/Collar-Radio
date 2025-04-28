@@ -62,7 +62,7 @@ extern "C" {
 #define RDA5807_REG05           0x05    //05H寄存器地址
 #define RDA5807_REG05_MSK       0x8F0F  //05H寄存器有效位
 #define RDA5807_REG05_INTM      0x8000  //持续拉低直到读取0CH 
-#define RDA5807_REG05_SEEKTH_MSK 0x0F00  //搜索阈值有效位
+#define RDA5807_REG05_SKTH_MSK  0x0F00  //搜索阈值有效位
 #define RDA5807_REG05_VOL_MSK   0x000F  //音量有效位
 
 #define RDA5807_REG06           0x06    //06H寄存器地址
@@ -154,6 +154,7 @@ void RDA5807_Reg03Tune(uint16_t Reg03);
 void RDA5807_SeekThSet(uint8_t RSSI);
 void RDA5807_SeekDirection(uint8_t Direction);
 void RDA5807_StartSeek(void);
+void RDA5807_InterruptSeek(void);
 uint16_t RDA5807_SeekChannel(void);
 //获取信息
 uint16_t RDA5807_GetFreqReg(void);

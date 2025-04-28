@@ -1114,6 +1114,11 @@ void ui_loop(ui_t *ui)
     }
 }
 
+/* TKWTL的注释
+ * 该函数为动画的动效参数赋初值
+ * kp越大，动画变动越快，但会冲过头
+ * ki为0时会产生静差
+ */
 static void AnimationParam_Init(ui_animation_t *Ani)
 {
     Ani->optionbar_ani.kp = 0.25f;
@@ -1122,8 +1127,8 @@ static void AnimationParam_Init(ui_animation_t *Ani)
 
     //光标动效参数
     Ani->cursor_ani.kp = 0.3f;
-    Ani->cursor_ani.ki = 0.1f;
-    Ani->cursor_ani.kd = 0.1f;
+    Ani->cursor_ani.ki = 0.03f;
+    Ani->cursor_ani.kd = 0.03f;
 
     //图片页动效参数
     Ani->imagePage_ani.kp = 0.25f;
@@ -1136,8 +1141,8 @@ static void AnimationParam_Init(ui_animation_t *Ani)
     Ani->textPage_ani.kd = 0.05f;
 
     //滚动条本体动效参数
-    Ani->scrollbar_ani.kp = 0.3f;
-    Ani->scrollbar_ani.ki = 0.01f;
+    Ani->scrollbar_ani.kp = 0.25f;
+    Ani->scrollbar_ani.ki = 0.0f;//必须是0，否则调参时指示条溢出并触发Hardfault
     Ani->scrollbar_ani.kd = 0.03f;
 
     //滚动条细线动效参数
