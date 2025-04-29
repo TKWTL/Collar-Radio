@@ -26,9 +26,6 @@ Examples/
 !*.h
 !*.c
 !*.ioc
-!*.axf
-!*.bin
-!*.hex
 
 nul
 
