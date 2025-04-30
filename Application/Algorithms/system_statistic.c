@@ -76,6 +76,7 @@ void ADC_SampleandFilter(void){
             if(Vbattery < 3.1f && lowpower_motificated == 0){
                 lowpower_motificated = 1;
                 Notification_Send(0);//触发低电量弹窗
+                RadioPowerMode = RADIO_OFF;
             }
             if(Vbattery > 3.4f) lowpower_motificated = 0;
             //更新电池电量格数，并实现回差

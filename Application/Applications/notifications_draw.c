@@ -14,6 +14,7 @@ const char* notification_text[] = {
 
 //向弹窗队列发送一条消息
 void Notification_Send(uint8_t index){
+    UserOperationDetected();
     osMessageQueuePut(Notification_QueueHandle, &index, NULL, 0);
 }
 

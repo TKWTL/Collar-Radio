@@ -67,7 +67,7 @@ extern "C" {
 #define UI_DATA_X1     (UI_HOR_RES - 10)
 #define UI_DATA_Y1     UI_VER_RES
 // UI日志输出定义
-#define UI_LOG  printf
+#define UI_LOG  disable_logging
 // 为1时单次任务(UI_ITEM_ONCE_FUNCTION)运行完毕后会弹窗提示
 #define UI_ONCEFUNCTION_TIP   0
 // 对话框动画持续时间

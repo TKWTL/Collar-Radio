@@ -127,7 +127,7 @@
   Jan 2020: Disabling this macro will save up to 600 bytes on AVR 
 */
 #ifndef U8G2_WITHOUT_FONT_ROTATION
-#define U8G2_WITH_FONT_ROTATION
+//#define U8G2_WITH_FONT_ROTATION
 #endif
 
 /*
@@ -155,7 +155,7 @@
       - Only character values 0 to 255 are supported in the font file.
 */
 #ifndef U8G2_WITHOUT_UNICODE
-#define U8G2_WITH_UNICODE
+//#define U8G2_WITH_UNICODE
 #endif
 
 
@@ -172,7 +172,7 @@
   Not defining U8G2_BALANCED_STR_WIDTH_CALCULATION would fall back to the old behavior.
 */
 #ifndef U8G2_NO_BALANCED_STR_WIDTH_CALCULATION 
-#define U8G2_BALANCED_STR_WIDTH_CALCULATION
+//#define U8G2_BALANCED_STR_WIDTH_CALCULATION
 #endif
 
 
