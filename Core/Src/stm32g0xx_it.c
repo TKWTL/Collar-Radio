@@ -213,14 +213,14 @@ void EXTI4_15_IRQHandler(void)
   {
     LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_5);
     /* USER CODE BEGIN LL_EXTI_LINE_5_FALLING */
-        //Notification_Send(3);
+        //Notification_Send("EarPlug Inserted.");
     /* USER CODE END LL_EXTI_LINE_5_FALLING */
   }
   if (LL_EXTI_IsActiveRisingFlag_0_31(LL_EXTI_LINE_5) != RESET)
   {
     LL_EXTI_ClearRisingFlag_0_31(LL_EXTI_LINE_5);
     /* USER CODE BEGIN LL_EXTI_LINE_5_RISING */
-        //Notification_Send(4);
+        //Notification_Send("EarPlug Removed.");
     /* USER CODE END LL_EXTI_LINE_5_RISING */
   }
   if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_6) != RESET)
@@ -248,7 +248,7 @@ void EXTI4_15_IRQHandler(void)
   {
     LL_EXTI_ClearFallingFlag_0_31(LL_EXTI_LINE_10);
     /* USER CODE BEGIN LL_EXTI_LINE_10_FALLING */
-
+    //INT脚的特殊处理
     /* USER CODE END LL_EXTI_LINE_10_FALLING */
   }
   if (LL_EXTI_IsActiveFallingFlag_0_31(LL_EXTI_LINE_15) != RESET)

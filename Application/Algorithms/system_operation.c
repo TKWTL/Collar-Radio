@@ -43,9 +43,10 @@ void SystemClock_Config(void);//main.c中由CubeMX自动生成的时钟配置函
 
 void SystemSleep(void){
     uint8_t RDA5807_Sleep;
-    if(idle_time > Sleep_time* (1000/ 10) && AutoSleepEnable){//处理无操作关机
+    if(idle_time > Sleep_time* (1000/ 10) && (AutoSleepEnable || Vbattery < 3.1f)){//处理无操作关机
         Disp_SetPowerSave(1);
-        if(RadioPowerMode == RADIO_OFF || (RadioPowerMode == RADIO_AUTO && LL_GPIO_IsInputPinSet(INDET_GPIO_Port, INDET_Pin))){
+        SC7A20_SetLowPower();
+        if(RadioPowerMode == RADIO_OFF || (RadioPowerMode == RADIO_AUTO && LL_GPIO_IsInputPinSet(INDET_GPIO_Port, INDET_Pin)) || Vbattery < 3.1f){
             RDA5807_Sleep = 1;
             RDA5807_PowerOff();
         }
@@ -80,6 +81,7 @@ void SystemSleep(void){
         if(WakeReason != WAKE_RTC){//不使用else是为了在检测过程中也可以正确唤醒
             Disp_SetContrast2(Contrast);
             Disp_SetPowerSave(0);
+            SC7A20_Init();
             
             osDelay(pdMS_TO_TICKS(WakePendingTime));//延时避免误触发
             Unstable_of_Wake = 0;

@@ -38,6 +38,7 @@ extern const unsigned char img_screen[];
 extern const unsigned char img_burn_in[];
 extern const unsigned char img_date[];
 extern const unsigned char img_scan[];
+extern const unsigned char img_gradienter[];
     
 #ifdef __cplusplus
 }

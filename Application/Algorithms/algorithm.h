@@ -34,7 +34,6 @@ extern "C" {
 //该层次各应用函数头文件
 #include "time.h"
 #include "system_operation.h"
-#include "radio_operation.h"
 #include "system_statistic.h"
 #include "display_effects.h"
 

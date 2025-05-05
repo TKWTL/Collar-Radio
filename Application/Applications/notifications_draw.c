@@ -3,19 +3,10 @@
 //弹窗显示时间（单位：毫秒）
 int notification_showtime = 1500;
 
-//定义弹窗提示文本的字符串数组
-const char* notification_text[] = {
-    "Battery Low!!",
-    "Charge Started.",
-    "Battery Fulled.",
-    "EarPlug Inserted.",
-    "EarPlug Removed."
-};
-
 //向弹窗队列发送一条消息
-void Notification_Send(uint8_t index){
+void Notification_Send(const char *msg){
     UserOperationDetected();
-    osMessageQueuePut(Notification_QueueHandle, &index, NULL, 0);
+    osMessageQueuePut(Notification_QueueHandle, &msg, NULL, 0);
 }
 
 /*
@@ -26,18 +17,18 @@ void Notification_Send(uint8_t index){
  */
 void Notification_Process(void){
     osStatus_t status;
-    uint8_t notification_index;
+    const char *notification_content;
     uint8_t bgC = ui.bgColor;
     int notification_timer;
     
-    status = osMessageQueueGet(Notification_QueueHandle, &notification_index, NULL, 0);
+    status = osMessageQueueGet(Notification_QueueHandle, &notification_content, NULL, 0);
     if(status == osOK){
         Disp_SendBuffer();
         vTaskSuspend(MenuHandle);
         //显示
         PopUp_Show(2, 10, 122, 42);
         Disp_SetFont(font_menu_main_h12w6);
-        Disp_DrawStr(5, 34, notification_text[notification_index]);
+        Disp_DrawStr(5, 34, notification_content);
         Disp_SendBuffer();
         
         //延时展示，有按键时退出

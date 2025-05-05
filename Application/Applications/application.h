@@ -18,6 +18,7 @@ extern "C" {
 #include "notifications_draw.h"
 #include "burn_in_tester.h"
 #include "i2c_scanner.h"
+#include "gradienter.h"
 
 //UI对象句柄
 extern ui_t ui;

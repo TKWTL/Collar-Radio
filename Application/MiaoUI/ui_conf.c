@@ -297,7 +297,7 @@ void Create_Text(ui_t *ui)
     github_text.font = UI_FONT;
     github_text.fontHight = UI_FONT_HIGHT;
     github_text.fontWidth = UI_FONT_WIDTH;
-    github_text.ptr = "Collar FM Receiver\nTKWTL 20250405\nGit:\nUI Provider:github.com/JFeng-Z/MiaoUI";
+    github_text.ptr = "Collar FM Receiver\nGit:github.com/TKWTL/Collar-Radio\nUI Provider:github.com/JFeng-Z/MiaoUI";
     static ui_element_t github_element;
     github_element.text = &github_text;
     Create_element(&Github_Item, &github_element);
@@ -377,15 +377,15 @@ void Create_MenuTree(ui_t *ui)
         AddItem("-Tools", UI_ITEM_PARENTS, img_tools, &Tool_Item, &Menu_Page, &Tool_Page, NULL);
             AddPage("[ToolPage]", &Tool_Page, UI_PAGE_ICON, &Menu_Page);
                 AddItem("[Menu]", UI_ITEM_RETURN, img_home, &ToolHead_Item, &Tool_Page, &Menu_Page, NULL);
-                //AddItem(" Gradienter", UI_ITEM_ONCE_FUNCTION, logo_allArray[3], &Gradienter_Item, &Tool_Page, NULL, NULL);
-                AddItem(" I2C Scanner", UI_ITEM_ONCE_FUNCTION, img_scan, &I2C_Scanner_Item, &Tool_Page, NULL, i2c_Scanner);
-                AddItem(" Burn-in Test", UI_ITEM_ONCE_FUNCTION, img_burn_in, &Burn_in_Test_Item, &Tool_Page, NULL, Burn_in_Tester);
+                AddItem("-Gradienter", UI_ITEM_ONCE_FUNCTION, img_gradienter, &Gradienter_Item, &Tool_Page, NULL, Gradienter);
+                AddItem("-I2C Scanner", UI_ITEM_ONCE_FUNCTION, img_scan, &I2C_Scanner_Item, &Tool_Page, NULL, i2c_Scanner);
+                AddItem("-Burn-in Test", UI_ITEM_ONCE_FUNCTION, img_burn_in, &Burn_in_Test_Item, &Tool_Page, NULL, Burn_in_Tester);
     
         AddItem("-Games", UI_ITEM_PARENTS, img_games, &Game_Item, &Menu_Page, &Game_Page, NULL);
             AddPage("[GamePage]", &Game_Page, UI_PAGE_ICON, &Menu_Page);
                 AddItem("[Menu]", UI_ITEM_RETURN, img_home, &GameHead_Item, &Game_Page, &Menu_Page, NULL);
                 AddItem("-Game Tetris", UI_ITEM_ONCE_FUNCTION, img_tetris, &Tetris_Item, &Game_Page, NULL, NULL);
-                AddItem("-Game Snake", UI_ITEM_ONCE_FUNCTION, img_snake, &Snake_Item, &Game_Page, NULL, NULL);
+                AddItem("-Game Snake", UI_ITEM_ONCE_FUNCTION, img_snake, &Snake_Item, &Game_Page, NULL, Game_Snake);
                 AddItem("-Game Dinosaur", UI_ITEM_ONCE_FUNCTION, img_dinosuar, &Dino_Item, &Game_Page, NULL, NULL);
                 
         AddItem("-About", UI_ITEM_WORD, img_toby_fox, &Github_Item, &Menu_Page, NULL, NULL);

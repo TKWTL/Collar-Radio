@@ -16,11 +16,11 @@ ChargeState_t eChargeState = DISCHARGING;//电池充放电模式
  */
 void UpdateChargeState(void){
     if(LL_GPIO_IsInputPinSet(CHRG_GPIO_Port, CHRG_Pin) == RESET){
-        if(eChargeState != CHARGING) Notification_Send(1);//触发充电中弹窗
+        if(eChargeState != CHARGING) Notification_Send("Charge Started.");//触发充电启动弹窗
         eChargeState = CHARGING;
     }
     else if(LL_GPIO_IsInputPinSet(STDBY_GPIO_Port, STDBY_Pin) == RESET){
-        if(eChargeState != CHARGED) Notification_Send(2);//触发充满弹窗
+        if(eChargeState != CHARGED) Notification_Send("Battery Fulled.");//触发充满弹窗
         eChargeState = CHARGED;
     }
     else{
@@ -75,7 +75,7 @@ void ADC_SampleandFilter(void){
              */
             if(Vbattery < 3.1f && lowpower_motificated == 0){
                 lowpower_motificated = 1;
-                Notification_Send(0);//触发低电量弹窗
+                Notification_Send("Battery Low!!");//触发低电量弹窗
                 RadioPowerMode = RADIO_OFF;
             }
             if(Vbattery > 3.4f) lowpower_motificated = 0;

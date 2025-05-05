@@ -2400,6 +2400,11 @@
               <FileType>1</FileType>
               <FilePath>..\Drivers\RDA5807M\rda5807m.c</FilePath>
             </File>
+            <File>
+              <FileName>sc7a20.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\SC7A20\sc7a20.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3064,6 +3069,11 @@
               <FileType>1</FileType>
               <FilePath>..\Application\Applications\i2c_scanner.c</FilePath>
             </File>
+            <File>
+              <FileName>gradienter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\Applications\gradienter.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3149,6 +3159,11 @@
               <FileType>1</FileType>
               <FilePath>..\Application\Tasks\notifications.c</FilePath>
             </File>
+            <File>
+              <FileName>sc7a20_handle.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\Tasks\sc7a20_handle.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3158,11 +3173,6 @@
               <FileName>time.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Application\Algorithms\time.c</FilePath>
-            </File>
-            <File>
-              <FileName>radio_operation.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Application\Algorithms\radio_operation.c</FilePath>
             </File>
             <File>
               <FileName>system_statistic.c</FileName>

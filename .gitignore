@@ -1,6 +1,8 @@
 # Keil Clean
 *.rar
 *.o
+*.hex
+*.axf
 *.d
 *.crf
 *.htm
@@ -25,6 +27,7 @@ Examples/
 !*.uvprojx
 !*.h
 !*.c
+!*.s
 !*.ioc
 
 nul
@@ -33,3 +36,6 @@ nul
 JLinkLog.txt
 *.dbgconf
 
+#Tool File
+*.bat
+*.lnk

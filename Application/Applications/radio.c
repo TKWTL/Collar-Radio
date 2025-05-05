@@ -92,10 +92,23 @@ void InitGlobalSeek(void){
 //用于管理RDA5807芯片开关状态的接口变量
 RadioPowerState_t RadioPowerMode = RADIO_AUTO;
 
+// 定义菜单项数量
+#define NUM_MENU_ITEMS 5
+// 固定标签数组
+const char* fixed_labels[NUM_MENU_ITEMS] = {
+    " Return",          // i=0
+    " Power Mode:",     // i=1
+    " Radio Mode:",     // i=2
+    NULL,               // i=3，没有固定标签
+    " Exit Page"
+};
+#define DYNAMIC_OPTIONS_X   78
+
 //收音机运行的界面函数，处理显示与按键
 void Radio_Run(ui_t *ui){
     char buf[16];                                                               //显示用缓冲区数组
     uint8_t color;                                                              //设置颜色
+    uint8_t i, y;
     
     static uint16_t frequency = 87* 40;                                         //频率，单位25KHz
     static uint8_t freq_align;                                                  //屏幕居中对齐用变量
@@ -103,7 +116,7 @@ void Radio_Run(ui_t *ui){
     static uint8_t isSeeking = 0;                                               //是否在搜台/调谐中
     uint8_t batterylvl;                                                         //电池实际显示格数，用于实现充电动效
     int16_t disp_value1 = 12;                                                   //动效变量
-    static RadioMode_t RadioMode = MODE_SEARCH;                                 //收音机的模式
+    static RadioMode_t RadioMode = MODE_STA;                                    //收音机的模式，默认预设电台
     uint8_t setting_mode = 0;                                                   //设置位切换标志
     uint8_t menu_index = 0;                                                     //设置项位置
     
@@ -269,41 +282,63 @@ void Radio_Run(ui_t *ui){
             }
         }
         else{//设置页面
+            // 绘制标题和水平线
             Disp_SetFont(font_menu_main_h12w6);
             Disp_DrawLine(0, 6, UI_HOR_RES, 6);
             Disp_DrawStr(28, 10, "Radio Setting");
-            Disp_DrawStr(1, 23, "*Return");
-            Disp_DrawStr(1, 36, "*Power Mode:");
-            switch(RadioPowerMode){
-                case RADIO_ON:
-                    Disp_DrawStr(73, 36, "ON");
-                    break;
-                case RADIO_AUTO:
-                    Disp_DrawStr(73, 36, "AUTO");
-                    break;
-                case RADIO_OFF:
-                    Disp_DrawStr(73, 36, "OFF");
-                    break;
+
+            // 绘制菜单项
+            for (i = 0; i < NUM_MENU_ITEMS; i++) {
+                y = 20 + i * 10; // 计算 Y 坐标
+
+                // 绘制固定标签（如果存在）
+                if (i != 3) { // i=0、1、2 有固定标签
+                    Disp_DrawStr(1, y, fixed_labels[i]);
+                    
+                }
+
+                // 绘制动态文本或值
+                if (i == 1) {
+                    // Power Mode 的值
+                    switch (RadioPowerMode) {
+                        case RADIO_ON:  Disp_DrawStr(DYNAMIC_OPTIONS_X, y, "ON");   break;
+                        case RADIO_AUTO:Disp_DrawStr(DYNAMIC_OPTIONS_X, y, "AUTO"); break;
+                        case RADIO_OFF: Disp_DrawStr(DYNAMIC_OPTIONS_X, y, "OFF");  break;
+                    }
+                } else if (i == 2) {
+                    // Radio Mode 的值
+                    if (RadioMode == MODE_SEARCH)       Disp_DrawStr(DYNAMIC_OPTIONS_X, y, "Search");
+                    else if (RadioMode == MODE_FREQ)    Disp_DrawStr(DYNAMIC_OPTIONS_X, y, "Frequency");
+                    else                                Disp_DrawStr(DYNAMIC_OPTIONS_X, y, "Preset");
+                } else if (i == 3) {
+                    // 动态文本（根据 RadioMode 和其他条件）
+                    if (RadioMode == MODE_STA) Disp_DrawStr(1, y, " All Clear and Seek");
+                    else {
+                        if (Station_IsExist(frequency)) Disp_DrawStr(1, y, " Remove from List");
+                        else Disp_DrawStr(1, y, " Add to station List");
+                    }
+                }
+                if(i == menu_index){
+                    if(i != 3) ui->cursor.nowWide  = (int)UI_Animation(strlen(fixed_labels[i])* 6 + 3, (float)ui->cursor.nowWide, &ui->animation.optionbarPos_ani);
+                    else{
+                        if (RadioMode == MODE_STA)
+                            ui->cursor.nowWide  = (int)UI_Animation(strlen(" All Clear and Seek")* 6 + 3, (float)ui->cursor.nowWide, &ui->animation.optionbarPos_ani);
+                        else {
+                            if (Station_IsExist(frequency))
+                                ui->cursor.nowWide  = (int)UI_Animation(strlen(" Remove from List")* 6 + 3, (float)ui->cursor.nowWide, &ui->animation.optionbarPos_ani);
+                            else
+                                ui->cursor.nowWide  = (int)UI_Animation(strlen(" Add to station List")* 6 + 3, (float)ui->cursor.nowWide, &ui->animation.optionbarPos_ani);
+                        }
+                    }
+                }
             }
-            Disp_DrawStr(1, 49, "*Radio Mode:");
-            switch(RadioMode){
-                case MODE_SEARCH:
-                case MODE_FREQ:
-                    if(RadioMode == MODE_SEARCH) Disp_DrawStr(73, 49, "Search");
-                    else Disp_DrawStr(73, 49, "Frequency");
-                    if(Station_IsExist(frequency)) Disp_DrawStr(1, 62, "*Remove from List");
-                    else Disp_DrawStr(1, 62, "*Add to station List");
-                    break;
-                case MODE_STA:
-                    Disp_DrawStr(73, 49, "Preset");
-                    Disp_DrawStr(1, 62, "*All Clear and Seek");
-                    break;
-            }
-            disp_value1 = (int16_t)UI_Animation((menu_index+ 1)* 13, (float)disp_value1, &ui->animation.cursor_ani);
+
+            // 绘制光标
+            disp_value1 = (int16_t)UI_Animation(10+ menu_index* 10, (float)disp_value1, &ui->animation.cursor_ani);
             color = 0x02;
             Disp_SetDrawColor(&color);
-            Disp_DrawRBox(0, disp_value1, UI_HOR_RES, 12, 0);
-            color = ui->bgColor^ 0x01;
+            Disp_DrawRBox(0, disp_value1 + 1, ui->cursor.nowWide, 10, 0);
+            color = ui->bgColor ^ 0x01;
             Disp_SetDrawColor(&color);
             
             switch(indevScan()){
@@ -316,11 +351,11 @@ void Radio_Run(ui_t *ui){
                 case UI_ACTION_DOWN:
                     break;
                 case UI_ACTION_PLUS:
-                    if(menu_index == 0) menu_index = 3;
+                    if(menu_index == 0) menu_index = NUM_MENU_ITEMS- 1;
                     else menu_index--;
                     break;
                 case UI_ACTION_MINUS:
-                    if(menu_index == 3) menu_index = 0;
+                    if(menu_index == NUM_MENU_ITEMS- 1) menu_index = 0;
                     else menu_index++;
                     break;
                 case UI_ACTION_ENTER:
@@ -348,6 +383,9 @@ void Radio_Run(ui_t *ui){
                                 else Station_Remove(frequency);
                             }
                             break;
+                        case 4://退出收音机操作界面（收音机仍在后台运行）
+                            ui->action = UI_ACTION_ENTER;
+                            return;
                     }
                     break;
                 case UI_ACTION_NONE:

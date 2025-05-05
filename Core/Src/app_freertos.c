@@ -122,6 +122,18 @@ const osThreadAttr_t Notification_attributes = {
   .cb_size = sizeof(NotificationControlBlock),
   .priority = (osPriority_t) osPriorityNormal,
 };
+/* Definitions for SC7A20 */
+osThreadId_t SC7A20Handle;
+uint32_t SC7A20Buffer[ 64 ];
+osStaticThreadDef_t SC7A20ControlBlock;
+const osThreadAttr_t SC7A20_attributes = {
+  .name = "SC7A20",
+  .stack_mem = &SC7A20Buffer[0],
+  .stack_size = sizeof(SC7A20Buffer),
+  .cb_mem = &SC7A20ControlBlock,
+  .cb_size = sizeof(SC7A20ControlBlock),
+  .priority = (osPriority_t) osPriorityNormal,
+};
 /* Definitions for Button_Queue */
 osMessageQueueId_t Button_QueueHandle;
 uint8_t Button_QueueBuffer[ 32 * sizeof( uint16_t ) ];
@@ -135,7 +147,7 @@ const osMessageQueueAttr_t Button_Queue_attributes = {
 };
 /* Definitions for Notification_Queue */
 osMessageQueueId_t Notification_QueueHandle;
-uint8_t NotificationQueueBuffer[ 16 * sizeof( uint8_t ) ];
+uint8_t NotificationQueueBuffer[ 16 * sizeof( const char* ) ];
 osStaticMessageQDef_t NotificationQueueControlBlock;
 const osMessageQueueAttr_t Notification_Queue_attributes = {
   .name = "Notification_Queue",
@@ -180,6 +192,7 @@ void ADC_Task(void *argument);
 void AirPressure_Task(void *argument);
 void Button_Handle(void *argument);
 void Notification_Task(void *argument);
+void SC7A20_Task(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -240,7 +253,7 @@ void MX_FREERTOS_Init(void) {
   Button_QueueHandle = osMessageQueueNew (32, sizeof(uint16_t), &Button_Queue_attributes);
 
   /* creation of Notification_Queue */
-  Notification_QueueHandle = osMessageQueueNew (16, sizeof(uint8_t), &Notification_Queue_attributes);
+  Notification_QueueHandle = osMessageQueueNew (16, sizeof(const char*), &Notification_Queue_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
@@ -264,6 +277,9 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of Notification */
   NotificationHandle = osThreadNew(Notification_Task, NULL, &Notification_attributes);
+
+  /* creation of SC7A20 */
+  SC7A20Handle = osThreadNew(SC7A20_Task, NULL, &SC7A20_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -381,6 +397,24 @@ __weak void Notification_Task(void *argument)
     osDelay(1);
   }
   /* USER CODE END Notification_Task */
+}
+
+/* USER CODE BEGIN Header_SC7A20_Task */
+/**
+* @brief Function implementing the SC7A20 thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_SC7A20_Task */
+__weak void SC7A20_Task(void *argument)
+{
+  /* USER CODE BEGIN SC7A20_Task */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END SC7A20_Task */
 }
 
 /* Private application code --------------------------------------------------*/
