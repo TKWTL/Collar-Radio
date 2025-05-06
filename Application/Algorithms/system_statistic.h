@@ -27,6 +27,12 @@ void ADC_SampleandFilter(void);
 #define BATTERY_LEVEL_MAX   4
 extern uint8_t Battery_level;//电池电量的格数
 
+/***********************以下函数须在ui_conf.c中调用****************************/
+//创建显示屏模块所需的参数
+void Create_Statistic_Parameters(ui_t *ui);
+//将显示屏模块的对象添加到菜单中
+void Add_Statistic_Items(ui_page_t *ParentPage);
+
 #ifdef __cplusplus
 }
 #endif

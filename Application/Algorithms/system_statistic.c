@@ -7,6 +7,7 @@
  *
  */
 #include "system_statistic.h"
+#include "image.h"//使用的图片资源
 
 
 ChargeState_t eChargeState = DISCHARGING;//电池充放电模式
@@ -117,3 +118,42 @@ void ADC_SampleandFilter(void){
 }
 
 uint8_t Battery_level = 3;//电池电量等级
+
+/***********************以下函数须在ui_conf.c中调用****************************/
+ui_item_t VBAT_Item, ICharge_Item, Tj_Item;
+//创建显示屏模块所需的参数
+void Create_Statistic_Parameters(ui_t *ui){
+    static ui_data_t VBAT_data;
+    VBAT_data.name = "Battery Voltage";
+    VBAT_data.ptr = &Vbattery;
+    VBAT_data.dataType = UI_DATA_FLOAT;
+    VBAT_data.actionType = UI_DATA_ACTION_RO;
+    static ui_element_t VBAT_element;
+    VBAT_element.data = &VBAT_data;
+    Create_element(&VBAT_Item, &VBAT_element);
+    
+    static ui_data_t Icharge_data;
+    Icharge_data.name = "Charge Current";
+    Icharge_data.ptr = &Icharge;
+    Icharge_data.dataType = UI_DATA_FLOAT;
+    Icharge_data.actionType = UI_DATA_ACTION_RO;
+    static ui_element_t Icharge_element;
+    Icharge_element.data = &Icharge_data;
+    Create_element(&ICharge_Item, &Icharge_element);
+    
+    static ui_data_t TJ_data;
+    TJ_data.name = "Junction Temp";
+    TJ_data.ptr = &Tjunction;
+    TJ_data.dataType = UI_DATA_FLOAT;
+    TJ_data.actionType = UI_DATA_ACTION_RO;
+    static ui_element_t TJ_element;
+    TJ_element.data = &TJ_data;
+    Create_element(&Tj_Item, &TJ_element);
+}
+
+//将显示屏模块的对象添加到菜单中
+void Add_Statistic_Items(ui_page_t *ParentPage){
+    AddItem(" Battery Voltage", UI_ITEM_DATA, NULL, &VBAT_Item, ParentPage, NULL, NULL);
+    AddItem(" Charge Current", UI_ITEM_DATA, NULL, &ICharge_Item, ParentPage, NULL, NULL);
+    AddItem(" CPU Temprature", UI_ITEM_DATA, NULL, &Tj_Item, ParentPage, NULL, NULL);
+}

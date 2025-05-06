@@ -19,7 +19,13 @@ void Manual_Reset(ui_t *ui);
 void UserOperationDetected(void);
 //循环执行的用于休眠的函数
 void SystemSleep(void);
-    
+   
+/***********************以下函数须在ui_conf.c中调用****************************/
+//创建显示屏模块所需的参数
+void Create_SystemCtrl_Parameters(ui_t *ui);
+//将显示屏模块的对象添加到菜单中
+void Add_SystemCtrl_Items(ui_page_t *ParentPage);
+
 #ifdef __cplusplus
 }
 #endif

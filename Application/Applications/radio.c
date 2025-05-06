@@ -96,13 +96,13 @@ RadioPowerState_t RadioPowerMode = RADIO_AUTO;
 #define NUM_MENU_ITEMS 5
 // 固定标签数组
 const char* fixed_labels[NUM_MENU_ITEMS] = {
-    " Return",          // i=0
-    " Power Mode:",     // i=1
-    " Radio Mode:",     // i=2
+    "Return",          // i=0
+    "Power Mode:",     // i=1
+    "Radio Mode:",     // i=2
     NULL,               // i=3，没有固定标签
-    " Exit Page"
+    "Exit Radio Page"
 };
-#define DYNAMIC_OPTIONS_X   78
+#define DYNAMIC_OPTIONS_X   74
 
 //收音机运行的界面函数，处理显示与按键
 void Radio_Run(ui_t *ui){
@@ -285,18 +285,13 @@ void Radio_Run(ui_t *ui){
             // 绘制标题和水平线
             Disp_SetFont(font_menu_main_h12w6);
             Disp_DrawLine(0, 6, UI_HOR_RES, 6);
-            Disp_DrawStr(28, 10, "Radio Setting");
+            Disp_DrawStr(19, 10, "-Radio Setting:-");
 
             // 绘制菜单项
             for (i = 0; i < NUM_MENU_ITEMS; i++) {
                 y = 20 + i * 10; // 计算 Y 坐标
-
                 // 绘制固定标签（如果存在）
-                if (i != 3) { // i=0、1、2 有固定标签
-                    Disp_DrawStr(1, y, fixed_labels[i]);
-                    
-                }
-
+                if (i != 3) Disp_DrawStr(2, y, fixed_labels[i]);
                 // 绘制动态文本或值
                 if (i == 1) {
                     // Power Mode 的值
@@ -312,22 +307,22 @@ void Radio_Run(ui_t *ui){
                     else                                Disp_DrawStr(DYNAMIC_OPTIONS_X, y, "Preset");
                 } else if (i == 3) {
                     // 动态文本（根据 RadioMode 和其他条件）
-                    if (RadioMode == MODE_STA) Disp_DrawStr(1, y, " All Clear and Seek");
+                    if (RadioMode == MODE_STA) Disp_DrawStr(1, y, "-All Clear and Seek-");
                     else {
-                        if (Station_IsExist(frequency)) Disp_DrawStr(1, y, " Remove from List");
-                        else Disp_DrawStr(1, y, " Add to station List");
+                        if (Station_IsExist(frequency)) Disp_DrawStr(1, y, "-Remove from List-");
+                        else Disp_DrawStr(1, y, "-Add to station List-");
                     }
                 }
                 if(i == menu_index){
-                    if(i != 3) ui->cursor.nowWide  = (int)UI_Animation(strlen(fixed_labels[i])* 6 + 3, (float)ui->cursor.nowWide, &ui->animation.optionbarPos_ani);
+                    if(i != 3) ui->cursor.nowWide = (int)UI_Animation(strlen(fixed_labels[i])* 6 + 2, (float)ui->cursor.nowWide, &ui->animation.optionbarPos_ani);
                     else{
-                        if (RadioMode == MODE_STA)
-                            ui->cursor.nowWide  = (int)UI_Animation(strlen(" All Clear and Seek")* 6 + 3, (float)ui->cursor.nowWide, &ui->animation.optionbarPos_ani);
-                        else {
-                            if (Station_IsExist(frequency))
-                                ui->cursor.nowWide  = (int)UI_Animation(strlen(" Remove from List")* 6 + 3, (float)ui->cursor.nowWide, &ui->animation.optionbarPos_ani);
+                        if(RadioMode == MODE_STA)
+                            ui->cursor.nowWide = (int)UI_Animation(strlen("-All Clear and Seek-")* 6 + 2, (float)ui->cursor.nowWide, &ui->animation.optionbarPos_ani);
+                        else{
+                            if(Station_IsExist(frequency))
+                                ui->cursor.nowWide = (int)UI_Animation(strlen("-Remove from List-")* 6 + 2, (float)ui->cursor.nowWide, &ui->animation.optionbarPos_ani);
                             else
-                                ui->cursor.nowWide  = (int)UI_Animation(strlen(" Add to station List")* 6 + 3, (float)ui->cursor.nowWide, &ui->animation.optionbarPos_ani);
+                                ui->cursor.nowWide = (int)UI_Animation(strlen("-Add to station List-")* 6 + 2, (float)ui->cursor.nowWide, &ui->animation.optionbarPos_ani);
                         }
                     }
                 }

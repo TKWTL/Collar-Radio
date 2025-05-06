@@ -15,6 +15,7 @@ extern "C" {
 //该层次各应用函数头文件
 #include "radio.h"
 #include "game_snake.h"
+#include "game_tetris.h"
 #include "notifications_draw.h"
 #include "burn_in_tester.h"
 #include "i2c_scanner.h"

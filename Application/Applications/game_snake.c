@@ -2,9 +2,9 @@
 #include "stdlib.h"//含有随机数函数库
 
 /*
- *使用二维数组实现一个贪吃蛇游戏：屏幕为128*64单色OLED，场地为13格高31格宽，4*4的屏幕瓦片中使用3*3的面积显示蛇身，蛇头做特殊图形处理，数组内容为：0：空白；1/2/3/4蛇的方向；255：水果。开局与被吃掉后水果在场地中随机生成，为一十字形状，每次进入函数，随机数采用RTC的当前时间作为种子，历史最高得分在函数退出后保留，当前分数在游戏结束后归零，两个分数一同显示在屏幕上方；场地分为有边和无边两种，有边情况下场地四周呈现实线框，蛇头撞上去游戏结束；无边情况下蛇可以从另一头出来，只有撞到自己才能结束游戏。UI_ACTION_ENTER切换进入菜单，菜单可以暂停游戏，菜单选项有继续，退出，修改有边无边，蛇的速度和蛇的速度递增选项（每吃一个果实速度提高一节）程序以一个函数的方式运行在STM32G070的FreeRTOS环境下，使用U8G2显示库与KEIL编译器
- *
- *
+ *使用二维数组实现的贪吃蛇游戏
+ *场地13格高，31格宽，分为有边和无边两种
+ *蛇的速度和蛇的速度递增可选以适应不同难度
  *由 Grok3.0 辅助创作  TKWTL 2025/05/04
  */
 
@@ -249,7 +249,7 @@ void Game_Snake(ui_t *ui){
             }
             
             // 处理菜单输入
-            switch (indevScan()) {
+            switch(indevScan()) {
                 case UI_ACTION_MINUS:
                     if (menu_selection < 4) menu_selection++;
                     else menu_selection = 0;
@@ -259,8 +259,10 @@ void Game_Snake(ui_t *ui){
                     else menu_selection = 4;
                     break;
                 case UI_ACTION_BACK:
-                    if (current_state == PAUSED) {
-                        current_state = PLAYING;
+                    if (current_state == PAUSED) current_state = PLAYING;
+                    else{
+                        ui->action = UI_ACTION_ENTER;
+                        return;
                     }
                     break;
                 case UI_ACTION_ENTER:

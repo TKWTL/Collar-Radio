@@ -28,8 +28,58 @@
  */
 #include "dispDriver.h"
 #include "cmsis_os2.h"
+#include "image.h"//使用的图片资源
 
 int Contrast = 15;//系统亮度
+
+/***********************以下函数须在ui_conf.c中调用****************************/
+ui_item_t Display_Item, DisplayHead_Item, Contrast_Item, MenuColor_Item, Rotation_Item;
+//创建显示屏模块所需的参数
+void Create_Disp_Parameters(ui_t *ui){
+    static ui_data_t Contrast_data;
+    Contrast_data.name = "Contrast";
+    Contrast_data.ptr = &Contrast;
+    Contrast_data.function = Disp_SetContrast;
+    Contrast_data.functionType = UI_DATA_FUNCTION_STEP_EXECUTE;
+    Contrast_data.dataType = UI_DATA_INT;
+    Contrast_data.actionType = UI_DATA_ACTION_RW;
+    Contrast_data.max = 63;
+    Contrast_data.min = 1;
+    Contrast_data.step = 2;
+    static ui_element_t Contrast_element;
+    Contrast_element.data = &Contrast_data;
+    Create_element(&Contrast_Item, &Contrast_element);
+    
+    static ui_data_t MenuColor_data;
+    MenuColor_data.name = "MenuColor";
+    MenuColor_data.ptr = &ui->bgColor;
+    MenuColor_data.dataType = UI_DATA_SWITCH;
+    MenuColor_data.actionType = UI_DATA_ACTION_RW;
+    static ui_element_t MenuColor_element;
+    MenuColor_element.data = &MenuColor_data;
+    Create_element(&MenuColor_Item, &MenuColor_element);
+    
+    static ui_data_t Rotation_data;
+    Rotation_data.name = "UpsideDown";
+    Rotation_data.ptr = &ui->rotation;
+    Rotation_data.function = Disp_ResumeRotation;
+    Rotation_data.dataType = UI_DATA_SWITCH;
+    Rotation_data.actionType = UI_DATA_ACTION_RW;
+    static ui_element_t Rotation_element;
+    Rotation_element.data = &Rotation_data;
+    Create_element(&Rotation_Item, &Rotation_element);
+}
+
+ui_page_t Display_Page;
+//将显示屏模块的对象添加到菜单中
+void Add_Disp_Items(ui_page_t *ParentPage){
+    AddItem("-Display", UI_ITEM_PARENTS, img_screen, &Display_Item, ParentPage, &Display_Page, NULL);
+        AddPage("[Display]", &Display_Page, UI_PAGE_TEXT, ParentPage);
+            AddItem("[Back]", UI_ITEM_RETURN, NULL, &DisplayHead_Item, &Display_Page, ParentPage, NULL);
+            AddItem(" Contrast", UI_ITEM_DATA, NULL, &Contrast_Item, &Display_Page, NULL, NULL);
+            AddItem(" BackGround Color", UI_ITEM_DATA, NULL, &MenuColor_Item, &Display_Page, NULL, NULL);
+            AddItem(" Upside Down", UI_ITEM_DATA, NULL, &Rotation_Item, &Display_Page, NULL, NULL);
+}
 
 /******************************I/O操作区开始***********************************/
 
@@ -331,4 +381,20 @@ uint16_t Disp_GetUTF8Width(const char *str)
 void Disp_UpdateDisplayArea(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th)
 {
     u8g2_UpdateDisplayArea(&u8g2, tx, ty, tw, th);
+}
+
+//设置屏幕的旋转方向，不改变ui_t中的方向
+void Disp_SetRotation(uint8_t rotation){
+    if(rotation) u8g2_SetDisplayRotation(&u8g2, U8G2_R0);
+    else u8g2_SetDisplayRotation(&u8g2, U8G2_R2);
+}
+//恢复屏幕的旋转方向（记录在ui_t全局结构体中）
+void Disp_ResumeRotation(ui_t *ui){
+    if(ui->rotation) u8g2_SetDisplayRotation(&u8g2, U8G2_R0);
+    else u8g2_SetDisplayRotation(&u8g2, U8G2_R2);
+}
+//更新屏幕的旋转方向，并改变ui_t中的方向
+void Disp_UpdateRotation(ui_t *ui, uint8_t rotation_state){
+    ui->rotation = rotation_state;
+    Disp_ResumeRotation(ui);
 }

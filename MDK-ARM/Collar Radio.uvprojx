@@ -3074,6 +3074,11 @@
               <FileType>1</FileType>
               <FilePath>..\Application\Applications\gradienter.c</FilePath>
             </File>
+            <File>
+              <FileName>game_tetris.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Application\Applications\game_tetris.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

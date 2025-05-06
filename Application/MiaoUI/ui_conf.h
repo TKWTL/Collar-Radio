@@ -35,6 +35,7 @@ extern "C" {
 #include "stdint.h"
 #include "stdbool.h"
 #include "fonts.h"
+#include "u8g2.h"
 
 // 屏幕分辨率定义
 #define UI_HOR_RES     128 // 水平分辨率
@@ -333,15 +334,16 @@ typedef struct ui_item_t {
  * 用于表示一个菜单的相关信息
  */
 typedef struct ui_t {
-    ui_item_pt nowItem;          // 当前选中的item
-    ui_item_pt oldItem;          // 上一个选中的item
+    ui_item_pt nowItem;         // 当前选中的item
+    ui_item_pt oldItem;         // 上一个选中的item
     ui_item_pt lastJumpItem;
-    uint8_t bgColor;          // 菜单的背景颜色
-    int textSpace;           // 文本间距
-    int imageSpace;          // 图片间距
+    uint8_t bgColor;            // 菜单的背景颜色
+    uint8_t rotation;           //屏幕显示方向
+    int textSpace;              // 文本间距
+    int imageSpace;             // 图片间距
     int headX;
     int headY;
-    UI_STATE menuState;     // 菜单的状态
+    UI_STATE menuState;         // 菜单的状态
     UI_ACTION action;
     ui_animation_t animation;
     ui_cursor_param_t cursor;

@@ -1,4 +1,80 @@
 #include "algorithm.h"
+#include "image.h"
+
+/***********************以下函数须在ui_conf.c中调用****************************/
+ui_item_t SleepTime_Item, AutoSleep_Item;
+ui_item_t SystemSetting_Item, SystemHead_Item, NotificationTime_Item, WakeInactiveTime_Item, Reset_Item;
+//创建显示屏模块所需的参数
+void Create_SystemCtrl_Parameters(ui_t *ui){
+    static ui_data_t SleepTime_data;
+    SleepTime_data.name = "Auto Sleep Time";
+    SleepTime_data.ptr = &Sleep_time;
+    SleepTime_data.dataType = UI_DATA_INT;
+    SleepTime_data.actionType = UI_DATA_ACTION_RW;
+    SleepTime_data.max = 600;
+    SleepTime_data.min = 10;
+    SleepTime_data.step = 5;
+    static ui_element_t SleepTime_element;
+    SleepTime_element.data = &SleepTime_data;
+    Create_element(&SleepTime_Item, &SleepTime_element);
+    
+    static ui_data_t AutoSleep_data;
+    AutoSleep_data.name = "Auto Sleep Enable";
+    AutoSleep_data.ptr = &AutoSleepEnable;
+    AutoSleep_data.dataType = UI_DATA_SWITCH;
+    AutoSleep_data.actionType = UI_DATA_ACTION_RW;
+    static ui_element_t AutoSleep_element;
+    AutoSleep_element.data = &AutoSleep_data;
+    Create_element(&AutoSleep_Item, &AutoSleep_element);
+    
+    static ui_data_t NotificationTime_data;
+    NotificationTime_data.name = "Noti Time";
+    NotificationTime_data.ptr = &notification_showtime;
+    NotificationTime_data.dataType = UI_DATA_INT;
+    NotificationTime_data.actionType = UI_DATA_ACTION_RW;
+    NotificationTime_data.max = 5000;
+    NotificationTime_data.min = 500;
+    NotificationTime_data.step = 500;
+    static ui_element_t NotificationTime_element;
+    NotificationTime_element.data = &NotificationTime_data;
+    Create_element(&NotificationTime_Item, &NotificationTime_element);
+    
+    static ui_data_t WakeInactiveTime_data;
+    WakeInactiveTime_data.name = "WkupInacTime";
+    WakeInactiveTime_data.ptr = &WakePendingTime;
+    WakeInactiveTime_data.dataType = UI_DATA_INT;
+    WakeInactiveTime_data.actionType = UI_DATA_ACTION_RW;
+    WakeInactiveTime_data.max = 1000;
+    WakeInactiveTime_data.min = 100;
+    WakeInactiveTime_data.step = 100;
+    static ui_element_t WakeInactiveTime_element;
+    WakeInactiveTime_element.data = &WakeInactiveTime_data;
+    Create_element(&WakeInactiveTime_Item, &WakeInactiveTime_element);
+    
+    static int Reset_Trigger = 0;
+    static ui_data_t Reset_data;
+    Reset_data.name = "System Reset";
+    Reset_data.ptr = &Reset_Trigger;
+    Reset_data.function = Manual_Reset;
+    Reset_data.dataType = UI_DATA_SWITCH;
+    Reset_data.actionType = UI_DATA_ACTION_RW;
+    static ui_element_t Reset_element;
+    Reset_element.data = &Reset_data;
+    Create_element(&Reset_Item, &Reset_element);
+}
+
+ui_page_t SystemSetting_Page;
+//将显示屏模块的对象添加到菜单中
+void Add_SystemCtrl_Items(ui_page_t *ParentPage){
+    AddItem("-System", UI_ITEM_PARENTS, img_configuration, &SystemSetting_Item, ParentPage, &SystemSetting_Page, NULL);
+        AddPage("[System]", &SystemSetting_Page, UI_PAGE_TEXT, ParentPage);
+            AddItem("[Back]", UI_ITEM_RETURN, NULL, &SystemHead_Item, &SystemSetting_Page, ParentPage, NULL);
+            AddItem(" AutoSleep Time", UI_ITEM_DATA, NULL, &SleepTime_Item, &SystemSetting_Page, NULL, NULL);
+            AddItem(" AutoSleep Enable", UI_ITEM_DATA, NULL, &AutoSleep_Item, &SystemSetting_Page, NULL, NULL);
+            AddItem(" Notification ShowTime", UI_ITEM_DATA, NULL, &NotificationTime_Item, &SystemSetting_Page, NULL, NULL);
+            AddItem(" Wakeup Inactive Time", UI_ITEM_DATA, NULL, &WakeInactiveTime_Item, &SystemSetting_Page, NULL, NULL);
+            AddItem(" System Reset", UI_ITEM_DATA, NULL, &Reset_Item, &SystemSetting_Page, NULL, NULL);
+}
 
 //系统复位函数
 void Manual_Reset(ui_t *ui){

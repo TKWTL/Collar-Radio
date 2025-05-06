@@ -29,6 +29,12 @@ extern RTC_DateTypeDef RTC_Date;
 void RTC_UpdateTime(void);//从RTC更新时间
 void SetTime(ui_t *ui);//将时间更新到RTC
     
+/***********************以下函数须在ui_conf.c中调用****************************/
+//创建显示屏模块所需的参数
+void Create_TimeSet_Parameters(ui_t *ui);
+//将显示屏模块的对象添加到菜单中
+void Add_TimeSet_Items(ui_page_t *ParentPage);
+
 #ifdef __cplusplus
 }
 #endif

@@ -1122,13 +1122,13 @@ void ui_loop(ui_t *ui)
 static void AnimationParam_Init(ui_animation_t *Ani)
 {
     Ani->optionbar_ani.kp = 0.25f;
-    Ani->optionbar_ani.ki = 0.0f;
+    Ani->optionbar_ani.ki = 0.00f;
     Ani->optionbar_ani.kd = 0.03f;
 
     //光标动效参数
-    Ani->cursor_ani.kp = 0.3f;
+    Ani->cursor_ani.kp = 0.25f;
     Ani->cursor_ani.ki = 0.03f;
-    Ani->cursor_ani.kd = 0.03f;
+    Ani->cursor_ani.kd = 0.02f;
 
     //图片页动效参数
     Ani->imagePage_ani.kp = 0.25f;
@@ -1146,8 +1146,8 @@ static void AnimationParam_Init(ui_animation_t *Ani)
     Ani->scrollbar_ani.kd = 0.03f;
 
     //滚动条细线动效参数
-    Ani->optionbarPos_ani.kp = 0.20f;
-    Ani->optionbarPos_ani.ki = 0.01f;
+    Ani->optionbarPos_ani.kp = 0.25f;
+    Ani->optionbarPos_ani.ki = 0.03f;
     Ani->optionbarPos_ani.kd = 0.01f;
 }
 

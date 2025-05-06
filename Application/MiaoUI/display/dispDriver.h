@@ -31,23 +31,22 @@
 extern "C" {
 #endif
 
-#include "stdint.h"
-#include "u8g2.h"
-#include "ui_conf.h"
-#include "main.h"
+#include "application.h"
     
 //U8G2句柄
 extern u8g2_t u8g2;
 
 extern int Contrast;//系统亮度
     
+/******************************I/O操作区开始***********************************/
 void diapInit(void);
 void Disp_SendBuffer(void);
 void Disp_SetContrast(ui_t *ui);
 void Disp_SetContrast2(uint8_t contrast);
 void Disp_SetPowerSave(uint8_t is_enable);
+/******************************I/O操作区结束***********************************/
     
-void Disp_ClearBuffer(void);
+void Disp_ClearBuffer(void);//清缓冲区
 void Disp_SetFont(const uint8_t  *font);
 void Disp_DrawPixel(uint16_t x, uint16_t y);//画点函数
 void Disp_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
@@ -68,6 +67,16 @@ void Disp_SetBufferCurrTileRow(uint8_t row);
 uint16_t Disp_DrawUTF8(uint16_t x, uint16_t y, const char *str);
 uint16_t Disp_GetUTF8Width(const char *str);
 void Disp_UpdateDisplayArea(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th);
+
+void Disp_SetRotation(uint8_t rotation);//设置屏幕的旋转方向，不改变ui_t中的方向
+void Disp_ResumeRotation(ui_t *ui);//恢复屏幕的旋转方向（记录在ui_t全局结构体中）
+void Disp_UpdateRotation(ui_t *ui, uint8_t rotation_state);//更新屏幕的旋转方向，并改变ui_t中的方向
+
+/***********************以下函数须在ui_conf.c中调用****************************/
+//创建显示屏模块所需的参数
+void Create_Disp_Parameters (ui_t *ui);
+//将显示屏模块的对象添加到菜单中
+void Add_Disp_Items(ui_page_t *ParentPage);
 
 #ifdef __cplusplus
 }
