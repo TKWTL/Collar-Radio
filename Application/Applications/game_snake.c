@@ -251,24 +251,24 @@ void Game_Snake(ui_t *ui){
             // 处理菜单输入
             switch(indevScan()) {
                 case UI_ACTION_MINUS:
-                    if (menu_selection < 4) menu_selection++;
+                    if(menu_selection < 4) menu_selection++;
                     else menu_selection = 0;
                     break;
                 case UI_ACTION_PLUS:
-                    if (menu_selection > 0) menu_selection--;
+                    if(menu_selection > 0) menu_selection--;
                     else menu_selection = 4;
                     break;
                 case UI_ACTION_BACK:
-                    if (current_state == PAUSED) current_state = PLAYING;
+                    if(current_state == PAUSED) current_state = PLAYING;
                     else{
                         ui->action = UI_ACTION_ENTER;
                         return;
                     }
                     break;
                 case UI_ACTION_ENTER:
-                    switch (menu_selection) {
+                    switch(menu_selection) {
                         case 0: // Resume/Restart
-                            if (current_state == PAUSED) current_state = PLAYING;
+                            if(current_state == PAUSED) current_state = PLAYING;
                             else  init_game();
                             break;
                         case 1: // Exit

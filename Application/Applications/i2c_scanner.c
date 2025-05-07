@@ -34,7 +34,7 @@ void i2c_Scanner(ui_t *ui){
         Disp_SetDrawColor(&color);
         //扫描
         for(i = 0; i < 128; i++){
-            if(HAL_I2C_IsDeviceReady(&hi2c2, i<<1, 3, 2) == HAL_OK){
+            if(I2C_IsReady(i<<1)){
                 if(i < 0x10) sprintf(buf, "0%x", i);
                 else sprintf(buf, "%x", i);
                 Disp_DrawStr(8*(i%16), 8*(i/16+1), buf);

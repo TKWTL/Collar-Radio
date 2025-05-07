@@ -385,13 +385,13 @@ void Disp_UpdateDisplayArea(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th)
 
 //设置屏幕的旋转方向，不改变ui_t中的方向
 void Disp_SetRotation(uint8_t rotation){
-    if(rotation) u8g2_SetDisplayRotation(&u8g2, U8G2_R0);
-    else u8g2_SetDisplayRotation(&u8g2, U8G2_R2);
+    if(rotation) u8g2_SetDisplayRotation(&u8g2, UI_ALTERNATE_ROTATION);
+    else u8g2_SetDisplayRotation(&u8g2, UI_DEFAULT_ROTATION);
 }
 //恢复屏幕的旋转方向（记录在ui_t全局结构体中）
 void Disp_ResumeRotation(ui_t *ui){
-    if(ui->rotation) u8g2_SetDisplayRotation(&u8g2, U8G2_R0);
-    else u8g2_SetDisplayRotation(&u8g2, U8G2_R2);
+    if(ui->rotation) u8g2_SetDisplayRotation(&u8g2, UI_ALTERNATE_ROTATION);
+    else u8g2_SetDisplayRotation(&u8g2, UI_DEFAULT_ROTATION);
 }
 //更新屏幕的旋转方向，并改变ui_t中的方向
 void Disp_UpdateRotation(ui_t *ui, uint8_t rotation_state){

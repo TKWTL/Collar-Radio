@@ -121,7 +121,7 @@ uint8_t Battery_level = 3;//电池电量等级
 
 /***********************以下函数须在ui_conf.c中调用****************************/
 ui_item_t VBAT_Item, ICharge_Item, Tj_Item;
-//创建显示屏模块所需的参数
+//创建系统数据模块所需的参数
 void Create_Statistic_Parameters(ui_t *ui){
     static ui_data_t VBAT_data;
     VBAT_data.name = "Battery Voltage";
@@ -151,7 +151,7 @@ void Create_Statistic_Parameters(ui_t *ui){
     Create_element(&Tj_Item, &TJ_element);
 }
 
-//将显示屏模块的对象添加到菜单中
+//将系统数据模块的对象添加到菜单中
 void Add_Statistic_Items(ui_page_t *ParentPage){
     AddItem(" Battery Voltage", UI_ITEM_DATA, NULL, &VBAT_Item, ParentPage, NULL, NULL);
     AddItem(" Charge Current", UI_ITEM_DATA, NULL, &ICharge_Item, ParentPage, NULL, NULL);

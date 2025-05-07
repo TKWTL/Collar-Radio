@@ -4,7 +4,7 @@
 /***********************以下函数须在ui_conf.c中调用****************************/
 ui_item_t SleepTime_Item, AutoSleep_Item;
 ui_item_t SystemSetting_Item, SystemHead_Item, NotificationTime_Item, WakeInactiveTime_Item, Reset_Item;
-//创建显示屏模块所需的参数
+//创建系统设置模块所需的参数
 void Create_SystemCtrl_Parameters(ui_t *ui){
     static ui_data_t SleepTime_data;
     SleepTime_data.name = "Auto Sleep Time";
@@ -64,7 +64,7 @@ void Create_SystemCtrl_Parameters(ui_t *ui){
 }
 
 ui_page_t SystemSetting_Page;
-//将显示屏模块的对象添加到菜单中
+//将系统设置模块的对象添加到菜单中
 void Add_SystemCtrl_Items(ui_page_t *ParentPage){
     AddItem("-System", UI_ITEM_PARENTS, img_configuration, &SystemSetting_Item, ParentPage, &SystemSetting_Page, NULL);
         AddPage("[System]", &SystemSetting_Page, UI_PAGE_TEXT, ParentPage);

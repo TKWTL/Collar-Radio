@@ -36,13 +36,13 @@
 UI_ACTION key_mapping_table[][6] = {
    //KeyIndex_A     KeyIndex_B      KeyIndex_C      KeyIndex_D      KeyIndex_E      KeyIndex_F
     {UI_ACTION_DOWN,UI_ACTION_MINUS,UI_ACTION_PLUS ,UI_ACTION_BACK, UI_ACTION_ENTER,UI_ACTION_UP},//横屏布局一
-    {UI_ACTION_UP,  UI_ACTION_PLUS, UI_ACTION_MINUS,UI_ACTION_BACK, UI_ACTION_ENTER,UI_ACTION_DOWN},//横屏布局二（反转）
+    {UI_ACTION_UP,  UI_ACTION_PLUS, UI_ACTION_MINUS,UI_ACTION_ENTER,UI_ACTION_BACK, UI_ACTION_DOWN},//横屏布局二（反转）
     {UI_ACTION_PLUS,UI_ACTION_DOWN, UI_ACTION_UP,   UI_ACTION_BACK, UI_ACTION_ENTER,UI_ACTION_MINUS},//竖屏布局一
-    {UI_ACTION_MINUS,UI_ACTION_UP,  UI_ACTION_DOWN, UI_ACTION_BACK, UI_ACTION_ENTER,UI_ACTION_PLUS}//竖屏布局二（反转）
+    {UI_ACTION_MINUS,UI_ACTION_UP,  UI_ACTION_DOWN, UI_ACTION_ENTER,UI_ACTION_BACK, UI_ACTION_PLUS}//竖屏布局二（反转）
 };//按键映射表
 uint8_t key_layout = 0;//按键布局指示，默认横屏布局一
 
-extern ui_t ui;
+extern ui_t ui;//外部的UI全局变量，用于识别页面状态
 
 UI_ACTION indevScan(void){
     UI_ACTION Action;
@@ -53,16 +53,14 @@ UI_ACTION indevScan(void){
     if(ui.nowItem->page.location->type == UI_PAGE_TEXT) key_layout = 2;
     else key_layout = 0;
     
-    if(ui.rotation) key_layout++;
+    if(ui.rotation) key_layout++;//
         
     /* 放入你的按键扫描代码 */
     status = osMessageQueueGet(Button_QueueHandle, &btn, 0, 0);
-    if(status == osOK){
+    if(status == osOK)
         Action = key_mapping_table[key_layout][btn >> 8];
-    }
-    else{
+    else
         Action = UI_ACTION_NONE;
-    }
     btn = 0;
     return Action;
 }

@@ -29,6 +29,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "oled.h"
+
+#include "ui_conf.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -99,7 +101,7 @@ int main(void)
   MX_RTC_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-    u8g2_Setup_ssd1312_i2c_128x64_noname_f(&u8g2, U8G2_R2, u8x8_byte_hw_i2c, u8x8_gpio_and_delay_hw);
+    u8g2_Setup_ssd1312_i2c_128x64_noname_f(&u8g2, UI_DEFAULT_ROTATION, u8x8_byte_hw_i2c, u8x8_gpio_and_delay_hw);
     LL_PWR_EnableFlashPowerDownInStop();
     /*
     __HAL_RCC_PWR_CLK_ENABLE(); // 启用电源时钟

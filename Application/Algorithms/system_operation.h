@@ -21,9 +21,9 @@ void UserOperationDetected(void);
 void SystemSleep(void);
    
 /***********************以下函数须在ui_conf.c中调用****************************/
-//创建显示屏模块所需的参数
+//创建系统设置模块所需的参数
 void Create_SystemCtrl_Parameters(ui_t *ui);
-//将显示屏模块的对象添加到菜单中
+//将系统设置模块的对象添加到菜单中
 void Add_SystemCtrl_Items(ui_page_t *ParentPage);
 
 #ifdef __cplusplus

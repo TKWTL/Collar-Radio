@@ -203,4 +203,13 @@ void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c){
     osSemaphoreRelease(mutex_i2c_busyHandle);
 }
 
+//确认地址存在函数
+uint8_t I2C_IsReady(uint8_t addr){
+    uint8_t ready;
+    osSemaphoreAcquire(mutex_i2c_idleHandle, osWaitForever);
+    if(HAL_I2C_IsDeviceReady(&hi2c2, addr, 2, 1) == HAL_OK) ready = 1;
+    else ready = 0;
+    osSemaphoreRelease(mutex_i2c_idleHandle);
+    return ready;
+}
 /* USER CODE END 1 */

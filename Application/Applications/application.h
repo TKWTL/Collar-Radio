@@ -16,6 +16,7 @@ extern "C" {
 #include "radio.h"
 #include "game_snake.h"
 #include "game_tetris.h"
+#include "game_dinosaur.h"
 #include "notifications_draw.h"
 #include "burn_in_tester.h"
 #include "i2c_scanner.h"

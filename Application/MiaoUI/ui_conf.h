@@ -40,6 +40,9 @@ extern "C" {
 // 屏幕分辨率定义
 #define UI_HOR_RES     128 // 水平分辨率
 #define UI_VER_RES     64 // 垂直分辨率
+// 屏幕默认旋转方向定义
+#define UI_DEFAULT_ROTATION U8G2_R2
+#define UI_ALTERNATE_ROTATION U8G2_R0
 // 菜单字体定义
 #define UI_FONT   font_menu_main_h12w6
 // 字体尺寸定义
@@ -338,7 +341,7 @@ typedef struct ui_t {
     ui_item_pt oldItem;         // 上一个选中的item
     ui_item_pt lastJumpItem;
     uint8_t bgColor;            // 菜单的背景颜色
-    uint8_t rotation;           //屏幕显示方向
+    uint8_t rotation;           // 屏幕显示方向
     int textSpace;              // 文本间距
     int imageSpace;             // 图片间距
     int headX;

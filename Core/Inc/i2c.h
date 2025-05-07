@@ -51,6 +51,7 @@ extern osSemaphoreId_t mutex_i2c_busyHandle;
     
 void I2C_Transmit(uint8_t addr, uint8_t* p_buf, uint32_t len);
 void I2C_Receive(uint8_t addr, uint8_t* p_buf, uint32_t len);
+uint8_t I2C_IsReady(uint8_t addr);//确认地址存在函数
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

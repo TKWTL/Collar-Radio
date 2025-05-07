@@ -172,7 +172,7 @@ void Create_MenuTree(ui_t *ui)
                 AddItem("[Menu]", UI_ITEM_RETURN, img_home, &GameHead_Item, &Game_Page, &Menu_Page, NULL);
                 AddItem("-Game Tetris", UI_ITEM_ONCE_FUNCTION, img_tetris, &Tetris_Item, &Game_Page, NULL, Game_Tetris);
                 AddItem("-Game Snake", UI_ITEM_ONCE_FUNCTION, img_snake, &Snake_Item, &Game_Page, NULL, Game_Snake);
-                AddItem("-Game Dinosaur", UI_ITEM_ONCE_FUNCTION, img_dinosuar, &Dino_Item, &Game_Page, NULL, NULL);
+                AddItem("-Game Dinosaur", UI_ITEM_ONCE_FUNCTION, img_dinosuar, &Dino_Item, &Game_Page, NULL, Game_DinoSaur);
                 
         AddItem("-About", UI_ITEM_WORD, img_toby_fox, &Github_Item, &Menu_Page, NULL, NULL);
 }
