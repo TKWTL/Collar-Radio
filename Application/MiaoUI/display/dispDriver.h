@@ -53,6 +53,7 @@ void Disp_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
 uint16_t Disp_Putchar(uint16_t x, uint16_t y, uint16_t encoding);
 uint16_t Disp_DrawStr(uint16_t x, uint16_t y, const char *str);
 void Disp_SetDrawColor(void *color);
+void Disp_SetBitmapMode(uint8_t is_transparent);
 void Disp_DrawFrame(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
 void Disp_DrawRFrame(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t r);
 void Disp_DrawBox(uint16_t x, uint16_t y, uint16_t w, uint16_t h);

@@ -51,12 +51,12 @@ void ParameterSetting_Widget(ui_t *ui)
         {
         case UI_ACTION_PLUS:
             Draw_Scrollbar(ui, x + 4, y + 18, w - 12, 6, 3, Step);
-            if(ui->nowItem->element->data->function != NULL && ui->nowItem->element->data->functionType == UI_DATA_FUNCTION_STEP_EXECUTE)ui->nowItem->element->data->function(ui);
+            if(ui->nowItem->element->data->function != NULL && ui->nowItem->element->data->functionType == UI_DATA_FUNCTION_STEP_EXECUTE) ui->nowItem->element->data->function(ui);
             break;
         case UI_ACTION_MINUS:
             Step = -Step;
             Draw_Scrollbar(ui, x + 4, y + 18, w - 12, 6, 3, Step);
-            if(ui->nowItem->element->data->function != NULL && ui->nowItem->element->data->functionType == UI_DATA_FUNCTION_STEP_EXECUTE)ui->nowItem->element->data->function(ui);
+            if(ui->nowItem->element->data->function != NULL && ui->nowItem->element->data->functionType == UI_DATA_FUNCTION_STEP_EXECUTE) ui->nowItem->element->data->function(ui);
             break;
         default:
             Draw_Scrollbar(ui, x + 4, y + 18, w - 12, 6, 3, 0);

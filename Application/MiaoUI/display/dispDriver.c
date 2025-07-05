@@ -236,6 +236,18 @@ void Disp_SetDrawColor(void *color)
 }
 
 /**
+ * 设置OLED显示设备的叠加模式。
+ * 
+ * @param is_transparent 是否透明，使用uint8_t类型表示。默认为0，表示像素被覆写；为1时，前景透明。
+ * 
+ * 该函数通过调用u8g2库的u8g2_SetBitmapMode函数，来设置当前的叠加模式。会影响后续所有绘制操作。
+ */
+void Disp_SetBitmapMode(uint8_t is_transparent)
+{
+    u8g2_SetBitmapMode(&u8g2, is_transparent); // 调用u8g2库的函数设置叠加模式
+}
+
+/**
  * 在OLED屏幕上绘制一个框架。
  * 
  * @param x 框架的起始x坐标。

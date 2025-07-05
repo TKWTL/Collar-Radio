@@ -14,7 +14,7 @@ typedef enum {
     PAUSED,     // 暂停菜单
     FAILED,     // 游戏失败
     WON         // 游戏胜利
-} GameState_t;  // 游戏状态枚举
+} SnakeGameState_t;  // 游戏状态枚举
 
 // 游戏参数
 #define ROWS 13
@@ -28,7 +28,8 @@ typedef enum {
     DIR_UP,
     DIR_RIGHT,
     DIR_DOWN,
-    DIR_LEFT
+    DIR_LEFT,
+    DIR_FRUIT = 255
 } Direction_t;  // 方向定义
 
 // 游戏状态变量
@@ -47,8 +48,7 @@ static uint16_t speed_increment_ms_per_fruit = 10;
 static uint16_t min_speed_ms = 160;
 
 static uint8_t menu_selection = 0;
-static GameState_t current_state = PLAYING; // 当前游戏状态
-static TickType_t last_move_tick;
+static SnakeGameState_t current_state = PLAYING; // 当前游戏状态
 
 //四个方向在行与列方向上的投影值
 static const int8_t dr[5] = {0, -1, 0, 1, 0}; // 0, up, right, down, left
@@ -56,13 +56,11 @@ static const int8_t dc[5] = {0, 0, 1, 0, -1};
 
 // 生成水果
 static void generate_fruit(void) {
-    // 尝试100次生成水果，确保中心及邻居格子为空
-    int tries = 100;
-    while (tries--) {
-        uint8_t r = (rand() % 11) + 1; // 1 to 11
-        uint8_t c = (rand() % 29) + 1; // 1 to 29
+    while (1) {
+        uint8_t r = (rand() % (ROWS- 2)) + 1; // 1 to 11
+        uint8_t c = (rand() % (COLS- 2)) + 1; // 1 to 29
         if (field[r][c] == 0) {
-            field[r][c] = 255; // 仅中心格子设为255
+            field[r][c] = DIR_FRUIT; 
             return;
         }
     }
@@ -156,7 +154,7 @@ static void move_snake(void) {
     // 设置新头部
     head_row = new_row;
     head_col = new_col;
-    if (field[head_row][head_col] == 255) {//吃到了果子
+    if (field[head_row][head_col] == DIR_FRUIT) {//吃到了果子
         field[head_row][head_col] = direction;// 设置新头部
         score++;
         if (score >= 400) {
@@ -214,6 +212,7 @@ void Game_Snake(ui_t *ui){
     uint8_t i, j;                                                               //遍历用变量
     uint8_t x, y;                                                               //定位用变量
     uint16_t current_speed;
+    TickType_t current_tick, last_move_tick;
     
     Disp_SetFont(font_menu_main_h12w6);//设置字体
     srand(sTime.Seconds + sTime.Date + sTime.Month + sTime.Year);//初始化种子
@@ -349,7 +348,7 @@ void Game_Snake(ui_t *ui){
             }
             
             // 移动蛇（速度逻辑处理）
-            TickType_t current_tick = xTaskGetTickCount();
+            current_tick = xTaskGetTickCount();
             
             if (score * speed_increment_ms_per_fruit > base_speed_ms - min_speed_ms) current_speed = min_speed_ms;
             else current_speed = base_speed_ms - score * speed_increment_ms_per_fruit;
@@ -382,7 +381,7 @@ void Game_Snake(ui_t *ui){
                             case DIR_DOWN:  Disp_DrawPixel(x + 1, y + 3); break;
                         }
                     }
-                    if (field[i][j] == 255) {//画水果
+                    if (field[i][j] == DIR_FRUIT) {//画水果
                         Disp_DrawPixel(x + 1, y);
                         Disp_DrawPixel(x, y + 1);
                         Disp_DrawPixel(x + 2, y + 1);

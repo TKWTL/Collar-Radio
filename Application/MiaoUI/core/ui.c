@@ -722,7 +722,7 @@ static void Draw_TextPage(ui_t *ui, ui_page_t *Page, ui_item_t *now_Item, ui_ite
     ui->cursor.nowRow = (int )UI_Animation((float )ui->cursor.targrtRow, (float )ui->cursor.nowRow, &ui->animation.cursor_ani);
     ui->cursor.nowWide = (int )UI_Animation((float )ui->cursor.targrtWide, (float )ui->cursor.nowWide, &ui->animation.cursor_ani);
     // 绘制选中项的高亮边框
-    Disp_DrawRBox(ui->headX + 1, ui->cursor.nowRow + 1, ui->cursor.nowWide, UI_FONT_HIGHT, 4);
+    Disp_DrawRBox(ui->headX , ui->cursor.nowRow, ui->cursor.nowWide, UI_FONT_HIGHT- 1, 0);
     Disp_SetMaxClipWindow();
 }
 

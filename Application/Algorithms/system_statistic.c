@@ -58,7 +58,7 @@ void ADC_SampleandFilter(void){
     static uint8_t lowpower_motificated = 0;
     uint8_t j;
     
-    switch(i++){
+    switch(i){
         case OVERSAMPLE_RATE://一轮采样完成，滤波并更新
             VCC = 3.00f* *VREFINT_CAL_ADDR/ adc_accumulator[CH_VCC];
         
@@ -113,6 +113,7 @@ void ADC_SampleandFilter(void){
             HAL_ADC_Start_DMA(&hadc1, (uint32_t*)(adc_buffer), CH_TOTAL);
             osDelay(pdMS_TO_TICKS(SAMPLE_PERIOD/ (OVERSAMPLE_RATE+ 1)));//直接延时等待采样完成
             for(j = 0; j < CH_TOTAL; j++) adc_accumulator[j] += adc_buffer[j];
+            i++;
             break;
     }
 }
