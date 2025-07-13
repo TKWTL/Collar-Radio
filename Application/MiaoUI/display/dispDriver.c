@@ -108,6 +108,11 @@ void Disp_SendBuffer(void)
     osSemaphoreRelease(mutex_disp_idleHandle);
 }
 
+void Disp_UpdateDisplayArea(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th)
+{
+    u8g2_UpdateDisplayArea(&u8g2, tx, ty, tw, th);
+}
+
 /**
  * 设置OLED显示器的对比度。
  * 
@@ -310,6 +315,36 @@ void Disp_DrawRBox(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t r)
 }
 
 /**
+ * 在OLED显示器上绘制一个圆圈。
+ * 
+ * @param x 圆心的x坐标。
+ * @param y 圆心的y坐标。
+ * @param w 圆半径。
+ * @param opt 圆的绘制选项。
+ * 
+ * 该函数调用u8g2的绘制圆圈函数，传入指定的坐标和尺寸，在OLED屏幕上绘制圆圈。
+ */
+void Disp_DrawCircle(uint16_t x, uint16_t y, uint16_t r, uint8_t opt)
+{
+    u8g2_DrawCircle(&u8g2, x, y, r, opt); // 调用u8g2库的绘制圆圈函数
+}
+
+/**
+ * 在OLED显示器上绘制一个实心圆。
+ * 
+ * @param x 圆心的x坐标。
+ * @param y 圆心的y坐标。
+ * @param w 圆半径。
+ * @param opt 圆的绘制选项。
+ * 
+ * 该函数调用u8g2的绘制实心圆函数，传入指定的坐标和尺寸，在OLED屏幕上绘制实心圆。
+ */
+void Disp_DrawDisc(uint16_t x, uint16_t y, uint16_t r, uint8_t opt)
+{
+    u8g2_DrawDisc(&u8g2, x, y, r, opt); // 调用u8g2库的绘制实心圆函数
+}
+
+/**
  * 在OLED显示器上绘制一个XBM图像。
  * 
  * @param x 图像在显示器上的起始x坐标。
@@ -388,11 +423,6 @@ uint16_t Disp_DrawUTF8(uint16_t x, uint16_t y, const char *str)
 uint16_t Disp_GetUTF8Width(const char *str)
 {
     return u8g2_GetUTF8Width(&u8g2, str);
-}
-
-void Disp_UpdateDisplayArea(uint8_t tx, uint8_t ty, uint8_t tw, uint8_t th)
-{
-    u8g2_UpdateDisplayArea(&u8g2, tx, ty, tw, th);
 }
 
 //设置屏幕的旋转方向，不改变ui_t中的方向

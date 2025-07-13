@@ -19,13 +19,15 @@ typedef struct {
     uint8_t available;
     uint32_t start_pos;//available == 1时，标记云朵的初始位置对应的坐标值；== 0时，用于云朵生成的倒计时
     uint8_t y_pos;
+    uint8_t speed_div;
 }Dino_Cloud_t;
 // 云的宏定义
 #define CLOUD_RESPAWN_MAX   512
 #define CLOUD_RESPAWN_MIN   32
 #define CLOUD_YPOS_MAX  40
 #define CLOUD_YPOS_MIN  4
-#define CLOUD_SPEED_DIVID   2   //云朵速度相当于背景速度的几分之一
+#define CLOUD_SPEED_DIVID_MAX   4   //云朵速度相当于背景速度的几分之一（最慢）
+#define CLOUD_SPEED_DIVID_MIN   2   //云朵速度相当于背景速度的几分之一（最快）
 #define CLOUD_POOL_DEPTH    4
 
 

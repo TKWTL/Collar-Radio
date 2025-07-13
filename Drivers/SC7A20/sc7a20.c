@@ -1,7 +1,7 @@
 #include "SC7A20.h"
 
 /* Globals ------------------------------------------------------------------*/
-static SC7A20_Handle_t SC7A20;
+static SC7A20_Handle_t SC7A20 = {0, 0, 0, 0, 0, 0, SC7A20_DEFAULT_GRAVITY, SC7A20_DEFAULT_GRAVITY, SC7A20_DEFAULT_GRAVITY};
 
 static void SC7A20_write_reg(uint8_t regAddr, uint8_t data){
     uint8_t temp[2] = {regAddr, data};
@@ -18,7 +18,7 @@ static void SC7A20_multiRead_reg(uint8_t regAddr, uint8_t *buf, uint8_t len){
     I2C_Receive(SC7A20_IIC_ADDRESS, buf, len);
 }
 
-//初始化SC7A20，也用于上电
+//初始化SC7A20，也用于休眠后的上电
 void SC7A20_Init(void){
     SC7A20_write_reg(SC7A20_CTRL_REG1, SC7A20_LP_ODR_10HZ);
     SC7A20_write_reg(SC7A20_CTRL_REG4, SC7A20_FS_2G| SC7A20_CTRL4_HR);
@@ -43,19 +43,30 @@ void SC7A20_Outdata_Load(void){
 
 //SC7A20 12位补码数据转换为国际单位制
 float SC7A20_12bitComplement(uint16_t Data){
-    int16_t Data_temp = Data >> 4;
-    if(Data_temp >= 2048) Data_temp -= 4096;
-    return 9.8f* 0.001f* Data_temp;
+    int16_t Data_temp = Data >> 4;//移位
+    if(Data_temp >= 2048) Data_temp -= 4096;//补码计算
+    return 0.001f* Data_temp;
 }
 
 float SC7A20_readaccel_x(void){
-    return SC7A20_12bitComplement(SC7A20.X_RawData);
+    return SC7A20_12bitComplement(SC7A20.X_RawData)* SC7A20.X_Gain + SC7A20.X_Offset;
 }
-
 float SC7A20_readaccel_y(void){
-    return SC7A20_12bitComplement(SC7A20.Y_RawData);
+    return SC7A20_12bitComplement(SC7A20.Y_RawData)* SC7A20.Y_Gain + SC7A20.Y_Offset;
+}
+float SC7A20_readaccel_z(void){
+    return SC7A20_12bitComplement(SC7A20.Z_RawData)* SC7A20.Z_Gain + SC7A20.Z_Offset;
 }
 
-float SC7A20_readaccel_z(void){
-    return SC7A20_12bitComplement(SC7A20.Z_RawData);
+void SC7A20_Compensate_X(float pos, float neg){
+    SC7A20.X_Offset -= (pos+ neg)/ 2;
+    SC7A20.X_Gain *= 2* SC7A20_DEFAULT_GRAVITY/ (pos- neg);
+}
+void SC7A20_Compensate_Y(float pos, float neg){
+    SC7A20.Y_Offset -= (pos+ neg)/ 2;
+    SC7A20.Y_Gain *= 2* SC7A20_DEFAULT_GRAVITY/ (pos- neg);
+}
+void SC7A20_Compensate_Z(float pos, float neg){
+    SC7A20.Z_Offset -= (pos+ neg)/ 2;
+    SC7A20.Z_Gain *= 2* SC7A20_DEFAULT_GRAVITY/ (pos- neg);
 }

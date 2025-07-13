@@ -8,6 +8,8 @@ extern "C" {
 #include "application.h"
 
 void Gradienter(ui_t *ui);
+
+void Accel_Calibration(ui_t *ui);
     
 /***********************以下函数须在ui_conf.c中调用****************************/
 //与MiaoUI的接口函数，用于注册水平仪的设置项

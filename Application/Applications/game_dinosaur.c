@@ -190,7 +190,7 @@ static void cloud_draw(){
     int pos;
     for(i = 0; i < CLOUD_POOL_DEPTH; i++){
         if(cloud_pool[i].available){
-            pos = UI_HOR_RES- ((uint32_t)score- cloud_pool[i].start_pos)/ CLOUD_SPEED_DIVID;//显示坐标计算
+            pos = UI_HOR_RES- ((uint32_t)score- cloud_pool[i].start_pos)/ cloud_pool[i].speed_div;//显示坐标计算
             Disp_DrawXBMP(pos, cloud_pool[i].y_pos, CLOUD_W, CLOUD_H, CLOUD);//绘制图案
         }
     }
@@ -201,7 +201,7 @@ static void cloud_process(){
     int pos;
     for(i = 0; i < CLOUD_POOL_DEPTH; i++){
         if(cloud_pool[i].available){
-            pos = UI_HOR_RES- ((uint32_t)score- cloud_pool[i].start_pos)/ CLOUD_SPEED_DIVID;//显示坐标计算
+            pos = UI_HOR_RES- ((uint32_t)score- cloud_pool[i].start_pos)/ cloud_pool[i].speed_div;//显示坐标计算
             if(pos < -CLOUD_W){//标记对象不可用的判断
                 cloud_pool[i].available = 0;
                 cloud_pool[i].start_pos = CLOUD_RESPAWN_MIN+ rand()% (CLOUD_RESPAWN_MAX- CLOUD_RESPAWN_MIN);//随机指定生成冷却
@@ -213,6 +213,7 @@ static void cloud_process(){
                 cloud_pool[i].available = 1;
                 cloud_pool[i].start_pos = (uint32_t)score;
                 cloud_pool[i].y_pos = CLOUD_YPOS_MIN+ rand()% (CLOUD_YPOS_MAX- CLOUD_YPOS_MIN);//随机指定生成高度
+                cloud_pool[i].speed_div = CLOUD_SPEED_DIVID_MIN+ rand()% (CLOUD_SPEED_DIVID_MAX- CLOUD_SPEED_DIVID_MIN);//随机指定滚动速度
             }
         }
     }
@@ -317,11 +318,11 @@ void Game_DinoSaur(ui_t *ui) {
         
         Disp_SetBitmapMode(0);//设置前景不透明
         if(current_state == FAILED){//显示失败提示与关于信息
-            Disp_DrawFrame(32, 10, 96, 46);
-            Disp_DrawStr(40, 21, "Game Over!!");
-            Disp_DrawStr(40, 31, "Dino Game V0.1");
-            Disp_DrawStr(58, 41, "from hjl240");
-            Disp_DrawStr(34, 53, "Jump to Restart");
+            //Disp_DrawFrame(32, 10, 96, 46);
+            Disp_DrawStr(34, 21, "Game Over!!");
+            Disp_DrawStr(22, 31, "Dino Game V0.1");
+            Disp_DrawStr(34, 41, "from hjl240");
+            Disp_DrawStr(34, 52, "Jump to Restart");
         }
         
 /*****************************按键操作识别*************************************/

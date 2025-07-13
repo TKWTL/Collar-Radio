@@ -20,5 +20,6 @@ void AirPressure_Task(void *argument)
         BMP180_GetPressure();
         osDelay(pdMS_TO_TICKS(500));
         RTC_UpdateTime();
+        BMP180_CalcAltitude();
     }
 }

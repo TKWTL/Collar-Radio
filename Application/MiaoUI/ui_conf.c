@@ -54,7 +54,7 @@ ui_item_t Snake_Item;
 ui_item_t Dino_Item;
 
 ui_item_t Tool_Item, ToolHead_Item;
-ui_item_t Gradienter_Item, I2C_Scanner_Item, Burn_in_Test_Item;
+ui_item_t Gradienter_Item, Accel_Cali_Item, I2C_Scanner_Item, Burn_in_Test_Item;
 
 ui_item_t Github_Item;
 
@@ -75,7 +75,6 @@ void Create_Parameter(ui_t *ui)
     //数据区
     Create_Statistic_Parameters(ui);
     
-    extern float BMP180_AirTemprature;
     static ui_data_t Tair_data;
     Tair_data.name = "Air Temprature";
     Tair_data.ptr = &BMP180_AirTemprature;
@@ -85,7 +84,6 @@ void Create_Parameter(ui_t *ui)
     Tair_element.data = &Tair_data;
     Create_element(&Tair_Item, &Tair_element);
     
-    extern float BMP180_AirPressure;
     static ui_data_t Pair_data;
     Pair_data.name = "Air Pressure";
     Pair_data.ptr = &BMP180_AirPressure;
@@ -164,13 +162,14 @@ void Create_MenuTree(ui_t *ui)
             AddPage("[ToolPage]", &Tool_Page, UI_PAGE_ICON, &Menu_Page);
                 AddItem("[Menu]", UI_ITEM_RETURN, img_home, &ToolHead_Item, &Tool_Page, &Menu_Page, NULL);
                 AddItem("-Gradienter", UI_ITEM_ONCE_FUNCTION, img_gradienter, &Gradienter_Item, &Tool_Page, NULL, Gradienter);
+                AddItem("-Accelerometer Calibration", UI_ITEM_ONCE_FUNCTION, img_gradienter_cal, &Accel_Cali_Item, &Tool_Page, NULL, Accel_Calibration);
                 AddItem("-I2C Scanner", UI_ITEM_ONCE_FUNCTION, img_scan, &I2C_Scanner_Item, &Tool_Page, NULL, i2c_Scanner);
                 AddItem("-Burn-in Test", UI_ITEM_ONCE_FUNCTION, img_burn_in, &Burn_in_Test_Item, &Tool_Page, NULL, Burn_in_Tester);
     
         AddItem("-Games", UI_ITEM_PARENTS, img_games, &Game_Item, &Menu_Page, &Game_Page, NULL);
             AddPage("[GamePage]", &Game_Page, UI_PAGE_ICON, &Menu_Page);
                 AddItem("[Menu]", UI_ITEM_RETURN, img_home, &GameHead_Item, &Game_Page, &Menu_Page, NULL);
-                AddItem("-Game Tetris", UI_ITEM_ONCE_FUNCTION, img_tetris, &Tetris_Item, &Game_Page, NULL, Game_Tetris);
+                //AddItem("-Game Tetris", UI_ITEM_ONCE_FUNCTION, img_tetris, &Tetris_Item, &Game_Page, NULL, Game_Tetris);
                 AddItem("-Game Snake", UI_ITEM_ONCE_FUNCTION, img_snake, &Snake_Item, &Game_Page, NULL, Game_Snake);
                 AddItem("-Game Dinosaur", UI_ITEM_ONCE_FUNCTION, img_dinosuar, &Dino_Item, &Game_Page, NULL, Game_DinoSaur);
                 

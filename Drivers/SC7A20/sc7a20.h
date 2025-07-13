@@ -6,8 +6,7 @@ extern "C" {
 #endif
     
 /*****************************用户配置区开始***********************************/
-#include "main.h"                                                               //包含库
-/*****************************用户配置区结束***********************************/
+#include "main.h"                                                               //包含接口驱动的库
  
 /* Defines ------------------------------------------------------------------*/
 /***Before using the driver, configure it according to the actual cable connection******/
@@ -21,6 +20,7 @@ extern "C" {
 /**The IIC interface address type of the SC7A20 is 8bits: 1****/
 #define SC7A20_IIC_7BITS_8BITS        1
 /*****************************************/
+/*****************************用户配置区结束***********************************/
  
 #if SC7A20_SDO_VDD_GND == 0
 #define SC7A20_IIC_7BITS_ADDR        0x18
@@ -35,8 +35,9 @@ extern "C" {
 #else
 #define SC7A20_IIC_ADDRESS       SC7A20_IIC_8BITS_ADDR
 #endif
- 
- 
+
+
+#define SC7A20_DEFAULT_GRAVITY  9.81f
  
 #define SC7A20_CHIP_ID_ADDRESS    (unsigned char)0x0F
 #define SC7A20_CHIP_ID_VALUE      (unsigned char)0x11
@@ -148,9 +149,15 @@ extern "C" {
 #define SC7A20_INT_AOI2_INT1          0x20 //AOI2 TO INT1
 
 typedef struct{
-    uint16_t X_RawData;
+    uint16_t X_RawData;//从传感器得到的各轴原始数据
     uint16_t Y_RawData;
     uint16_t Z_RawData;
+    float X_Offset;//各轴偏置
+    float Y_Offset;
+    float Z_Offset;
+    float X_Gain;//各轴增益
+    float Y_Gain;
+    float Z_Gain;
 } SC7A20_Handle_t;
 
 //初始化SC7A20，也用于上电
@@ -161,10 +168,15 @@ uint8_t SC7A20_id_get(void);
 //从传感器加载加速度值
 void SC7A20_Outdata_Load(void);
 
+//读取三轴加速度
 float SC7A20_readaccel_x(void);
 float SC7A20_readaccel_y(void);
 float SC7A20_readaccel_z(void);
-    
+//对三个轴的加速度进行校准
+void SC7A20_Compensate_X(float pos, float neg);
+void SC7A20_Compensate_Y(float pos, float neg);
+void SC7A20_Compensate_Z(float pos, float neg);
+
 #ifdef __cplusplus
 }
 #endif

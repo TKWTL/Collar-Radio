@@ -99,9 +99,6 @@ extern "C" {
 
 
 
-#define READ	        1   
-#define WRITE	        0
-
 #define NOTUNE          0       //不调谐
 #define TUNE            1       //调谐
 #define MONO            0
@@ -113,16 +110,16 @@ extern "C" {
 #define SEEK_DOWN       0
 
 struct RDA5807_t{
-uint8_t Cur_Band;                           //当前频段(0-3)
-uint32_t Band_Base[4][2];        //频段值
+    uint8_t Cur_Band;                           //当前频段(0-3)
+    uint32_t Band_Base[4][2];        //频段值
 
-uint8_t Cur_Step;                           //当前步进值(0-3) =3时搜不到台
-uint8_t Ch_Spacing[4];        //频率步进值（单位25KHz）
+    uint8_t Cur_Step;                           //当前步进值(0-3) =3时搜不到台
+    uint8_t Ch_Spacing[4];        //频率步进值（单位25KHz）
 
-//uint32_t Cur_Frq = 0;                         //当前频率，没用Chan值为方便修改频段和步进值后的转换，需控制范围？？？何处控制？
-uint8_t isSearching;                            //正在搜索频道中
+    //uint32_t Cur_Frq = 0;                         //当前频率，没用Chan值为方便修改频段和步进值后的转换，需控制范围？？？何处控制？
+    uint8_t isSearching;                            //正在搜索频道中
 
-uint8_t Cur_Vol;                            //当前音量(0-15)
+    uint8_t Cur_Vol;                            //当前音量(0-15)
 };//RDA5807参数句柄，需要定时更新或上传
 
 /* 声明给外部使用的变量 */

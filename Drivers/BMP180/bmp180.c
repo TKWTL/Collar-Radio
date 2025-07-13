@@ -1,4 +1,5 @@
 #include "bmp180.h"
+#include "math.h"
 
 uint8_t temp[4] = {0};
 uint8_t bmp180_cal[22];                                                         //BMP180校准值寄存器，从0xAA ~ 0xBF
@@ -78,4 +79,11 @@ void BMP180_GetPressure(void){
     X2 = (-7357 * BMP180_AirPressure) >> 16;
     BMP180_AirPressure = BMP180_AirPressure + ((X1 + X2 + 3791) >> 4);  
 }
-    
+
+void BMP180_CalcAltitude(void) {
+    float P = (float)BMP180_AirPressure;  // 单位 Pa
+    float P0 = 101325.0f;                 // 海平面标准大气压 Pa
+
+    BMP180_Altitude = 44330.0f * (1.0f - powf(P / P0, 0.1903f));
+    BMP180_AirPressure_kPa = P / 1000.0f;
+}

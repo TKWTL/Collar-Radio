@@ -8,7 +8,8 @@ void Game_Tetris(ui_t *ui){
     //init_game();//初始化地图
     
     while(1){
-        // 处理游戏输入
+        
+/****************************处理游戏输入**************************************/
         switch (indevScan()) {
             case UI_ACTION_PLUS:
                 break;

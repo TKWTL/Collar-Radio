@@ -29,17 +29,18 @@ extern "C" {
 #define BMP180_MC_OFFSET        18
 #define BMP180_MD_OFFSET        20
 
-/*#define BMP180_LOAD\
-            BMP180_StartConv(0x2E);\
-            osDelay(pdMS_TO_TICKS(5));\
-            BMP180_GetRawTemprature();\
-            */
+
+extern float BMP180_AirTemprature;
+extern int32_t BMP180_AirPressure;
+extern float BMP180_AirPressure_kPa;
+extern float BMP180_Altitude;
     
     
 void BMP180_Init(void);
 void BMP180_StartConv(uint8_t code);
 void BMP180_GetTemprature(void);
 void BMP180_GetPressure(void);
+void BMP180_CalcAltitude(void);
 #ifdef __cplusplus
 }
 #endif
